@@ -21,10 +21,29 @@ variable "proxmox_tls_insecure" {
   default     = true
 }
 
-# VM Template Settings
-variable "template_vm_id" {
-  description = "VM ID of the template to clone (must be created in Proxmox first)"
-  type        = number
+# Cloud Image Settings
+variable "cloud_image_url" {
+  description = "URL to download the cloud image from"
+  type        = string
+  default     = "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img"
+}
+
+variable "cloud_image_filename" {
+  description = "Filename for the cloud image (must have .qcow2 extension for import)"
+  type        = string
+  default     = "jammy-server-cloudimg-amd64.qcow2"
+}
+
+variable "cloud_image_datastore" {
+  description = "Datastore for the cloud image file"
+  type        = string
+  default     = "local"
+}
+
+variable "cloud_image_node" {
+  description = "Proxmox node to download the cloud image to"
+  type        = string
+  default     = "pve"
 }
 
 variable "template_storage" {
@@ -38,12 +57,6 @@ variable "network_bridge" {
   description = "Network bridge to use for VMs"
   type        = string
   default     = "vmbr0"
-}
-
-variable "network_model" {
-  description = "Network card model"
-  type        = string
-  default     = "virtio"
 }
 
 variable "gateway" {
@@ -65,9 +78,10 @@ variable "ssh_user" {
   default     = "ubuntu"
 }
 
-variable "ssh_public_key" {
-  description = "SSH public key for VM access"
+variable "ssh_public_key_path" {
+  description = "Path to SSH public key file for VM access"
   type        = string
+  default     = "~/.ssh/id_rsa.pub"
 }
 
 # K3s Cluster Configuration
@@ -77,11 +91,12 @@ variable "cluster_name" {
   default     = "k3s"
 }
 
-# Control Plane Nodes Configuration
-variable "control_plane_nodes" {
-  description = "List of control plane node configurations"
+# K3s Nodes Configuration (Control Plane and Workers)
+variable "k3s_nodes" {
+  description = "List of K3s nodes (control plane and workers)"
   type = list(object({
     name         = string
+    description  = string
     proxmox_node = string
     cpu_cores    = number
     memory_mb    = number
@@ -91,29 +106,16 @@ variable "control_plane_nodes" {
   default = [
     {
       name         = "control-01"
+      description  = "K3s Control Plane Node 1"
       proxmox_node = "pve"
       cpu_cores    = 2
       memory_mb    = 4096
       disk_size_gb = 40
       ip_address   = "192.168.1.10"
-    }
-  ]
-}
-
-# Worker Nodes Configuration
-variable "worker_nodes" {
-  description = "List of worker node configurations"
-  type = list(object({
-    name         = string
-    proxmox_node = string
-    cpu_cores    = number
-    memory_mb    = number
-    disk_size_gb = number
-    ip_address   = string
-  }))
-  default = [
+    },
     {
       name         = "worker-01"
+      description  = "K3s Worker Node 1"
       proxmox_node = "pve"
       cpu_cores    = 2
       memory_mb    = 5120
@@ -122,6 +124,7 @@ variable "worker_nodes" {
     },
     {
       name         = "worker-02"
+      description  = "K3s Worker Node 2"
       proxmox_node = "pve"
       cpu_cores    = 2
       memory_mb    = 5120
