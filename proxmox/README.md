@@ -1,5 +1,8 @@
 # Setup steps
 
+
+## Proxmox API token
+
 Create a proxmox user and terraform according to the [docs](https://registry.terraform.io/providers/Telmate/proxmox/latest/docs#creating-the-proxmox-user-and-role-for-terraform):
 
 ```bash
@@ -13,3 +16,7 @@ Create an API token:
 ```bash
 pveum user token add terraform-user@pve terraform-token
 ```
+
+#https://github.com/fvumbaca/terraform-proxmox-k3s/blob/main/master_nodes.tf
+
+## Proxmox VM template

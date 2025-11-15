@@ -21,17 +21,10 @@ variable "proxmox_tls_insecure" {
   default     = true
 }
 
-variable "proxmox_node" {
-  description = "Name of the Proxmox node to deploy VMs on"
-  type        = string
-  default     = "pve"
-}
-
 # VM Template Settings
-variable "template_name" {
-  description = "Name of the VM template to clone (must be created in Proxmox first)"
-  type        = string
-  default     = "ubuntu-cloud-template"
+variable "template_vm_id" {
+  description = "VM ID of the template to clone (must be created in Proxmox first)"
+  type        = number
 }
 
 variable "template_storage" {
@@ -84,21 +77,56 @@ variable "cluster_name" {
   default     = "k3s"
 }
 
-# IP Configuration
-variable "control_plane_ip" {
-  description = "IP address for control plane node"
-  type        = string
-  default     = "192.168.1.10"
+# Control Plane Nodes Configuration
+variable "control_plane_nodes" {
+  description = "List of control plane node configurations"
+  type = list(object({
+    name         = string
+    proxmox_node = string
+    cpu_cores    = number
+    memory_mb    = number
+    disk_size_gb = number
+    ip_address   = string
+  }))
+  default = [
+    {
+      name         = "control-01"
+      proxmox_node = "pve"
+      cpu_cores    = 2
+      memory_mb    = 4096
+      disk_size_gb = 40
+      ip_address   = "192.168.1.10"
+    }
+  ]
 }
 
-variable "worker1_ip" {
-  description = "IP address for worker node 1"
-  type        = string
-  default     = "192.168.1.20"
-}
-
-variable "worker2_ip" {
-  description = "IP address for worker node 2"
-  type        = string
-  default     = "192.168.1.21"
+# Worker Nodes Configuration
+variable "worker_nodes" {
+  description = "List of worker node configurations"
+  type = list(object({
+    name         = string
+    proxmox_node = string
+    cpu_cores    = number
+    memory_mb    = number
+    disk_size_gb = number
+    ip_address   = string
+  }))
+  default = [
+    {
+      name         = "worker-01"
+      proxmox_node = "pve"
+      cpu_cores    = 2
+      memory_mb    = 5120
+      disk_size_gb = 60
+      ip_address   = "192.168.1.20"
+    },
+    {
+      name         = "worker-02"
+      proxmox_node = "pve"
+      cpu_cores    = 2
+      memory_mb    = 5120
+      disk_size_gb = 60
+      ip_address   = "192.168.1.21"
+    }
+  ]
 }

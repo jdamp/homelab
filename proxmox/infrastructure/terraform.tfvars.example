@@ -1,0 +1,83 @@
+# Proxmox Connection Settings
+proxmox_api_url          = "https://your-proxmox-host:8006"
+proxmox_api_token_id     = "terraform-user@pve!terraform-token"
+proxmox_api_token_secret = "your-token-secret-here"
+proxmox_tls_insecure     = true
+
+# Template Configuration
+# Note: Use the VM ID of your cloud-init template, not the name
+template_vm_id   = 9000
+template_storage = "local-lvm"
+
+# Network Configuration
+network_bridge = "vmbr0"
+network_model  = "virtio"
+gateway        = "192.168.1.1"
+nameserver     = "8.8.8.8"
+
+# SSH Configuration
+ssh_user       = "ubuntu"
+ssh_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC... your-public-key-here"
+
+# K3s Cluster Configuration
+cluster_name = "k3s"
+
+# Control Plane Nodes
+# You can add multiple control plane nodes for HA setup
+control_plane_nodes = [
+  {
+    name         = "control-01"
+    proxmox_node = "pve"
+    cpu_cores    = 2
+    memory_mb    = 4096
+    disk_size_gb = 40
+    ip_address   = "192.168.1.10"
+  }
+  # Uncomment to add additional control plane nodes:
+  # {
+  #   name         = "control-02"
+  #   proxmox_node = "pve"
+  #   cpu_cores    = 2
+  #   memory_mb    = 4096
+  #   disk_size_gb = 40
+  #   ip_address   = "192.168.1.11"
+  # },
+  # {
+  #   name         = "control-03"
+  #   proxmox_node = "pve2"  # Can be on a different node
+  #   cpu_cores    = 2
+  #   memory_mb    = 4096
+  #   disk_size_gb = 40
+  #   ip_address   = "192.168.1.12"
+  # }
+]
+
+# Worker Nodes
+# Add or remove worker nodes as needed
+worker_nodes = [
+  {
+    name         = "worker-01"
+    proxmox_node = "pve"  # Proxmox node name where this VM will be deployed
+    cpu_cores    = 2
+    memory_mb    = 5120
+    disk_size_gb = 60
+    ip_address   = "192.168.1.20"
+  },
+  {
+    name         = "worker-02"
+    proxmox_node = "pve"
+    cpu_cores    = 2
+    memory_mb    = 5120
+    disk_size_gb = 60
+    ip_address   = "192.168.1.21"
+  }
+  # Add more workers as needed:
+  # {
+  #   name         = "worker-03"
+  #   proxmox_node = "pve2"  # Can be on a different node
+  #   cpu_cores    = 4
+  #   memory_mb    = 8192
+  #   disk_size_gb = 100
+  #   ip_address   = "192.168.1.22"
+  # }
+]

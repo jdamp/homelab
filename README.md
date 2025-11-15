@@ -5,4 +5,5 @@ Using proxmox, multiple VMs will be run on this node for a k3s cluster.
 
 
 ## Repository structure
-- The `proxmox` folder contains the configuration for the proxmox VMs on the physical hosts.
+- The `proxmox` folder contains the configuration for the proxmox VMs on the physical hosts:
+- The `vm-template` folder contains the creation of the VM template
