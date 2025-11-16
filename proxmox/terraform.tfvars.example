@@ -5,18 +5,14 @@ proxmox_api_token_secret = "your-token-secret-here"
 proxmox_tls_insecure     = true
 
 # Cloud Image Settings
-cloud_image_url        = "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img"
+cloud_image_url        = "https://cloud.debian.org/images/cloud/trixie/latest/debian-13-generic-amd64.qcow2"
 cloud_image_filename   = "jammy-server-cloudimg-amd64.qcow2"
-cloud_image_datastore  = "local"
-cloud_image_node       = "pve"
+cloud_image_nodes      = ["pve"]
 
-# Storage Settings
-template_storage = "local-lvm"
 
 # Network Configuration
 network_bridge = "vmbr0"
 gateway        = "192.168.1.1"
-nameserver     = "8.8.8.8"
 
 # SSH Configuration
 ssh_user            = "ubuntu"

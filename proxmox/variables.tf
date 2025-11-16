@@ -25,31 +25,16 @@ variable "proxmox_tls_insecure" {
 variable "cloud_image_url" {
   description = "URL to download the cloud image from"
   type        = string
-  default     = "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img"
 }
 
 variable "cloud_image_filename" {
   description = "Filename for the cloud image (must have .qcow2 extension for import)"
   type        = string
-  default     = "jammy-server-cloudimg-amd64.qcow2"
 }
 
-variable "cloud_image_datastore" {
-  description = "Datastore for the cloud image file"
-  type        = string
-  default     = "local"
-}
-
-variable "cloud_image_node" {
-  description = "Proxmox node to download the cloud image to"
-  type        = string
-  default     = "pve"
-}
-
-variable "template_storage" {
-  description = "Storage location for VM disks"
-  type        = string
-  default     = "local-lvm"
+variable "cloud_image_nodes" {
+  description = "List of Proxmox nodes to download the cloud image to"
+  type        = list(string)
 }
 
 # Network Settings
@@ -65,12 +50,6 @@ variable "gateway" {
   default     = "192.168.1.1"
 }
 
-variable "nameserver" {
-  description = "DNS nameserver"
-  type        = string
-  default     = "8.8.8.8"
-}
-
 # SSH Settings
 variable "ssh_user" {
   description = "SSH user for VM access"
@@ -81,7 +60,6 @@ variable "ssh_user" {
 variable "ssh_public_key_path" {
   description = "Path to SSH public key file for VM access"
   type        = string
-  default     = "~/.ssh/id_rsa.pub"
 }
 
 # K3s Cluster Configuration
@@ -103,33 +81,4 @@ variable "k3s_nodes" {
     disk_size_gb = number
     ip_address   = string
   }))
-  default = [
-    {
-      name         = "control-01"
-      description  = "K3s Control Plane Node 1"
-      proxmox_node = "pve"
-      cpu_cores    = 2
-      memory_mb    = 4096
-      disk_size_gb = 40
-      ip_address   = "192.168.1.10"
-    },
-    {
-      name         = "worker-01"
-      description  = "K3s Worker Node 1"
-      proxmox_node = "pve"
-      cpu_cores    = 2
-      memory_mb    = 5120
-      disk_size_gb = 60
-      ip_address   = "192.168.1.20"
-    },
-    {
-      name         = "worker-02"
-      description  = "K3s Worker Node 2"
-      proxmox_node = "pve"
-      cpu_cores    = 2
-      memory_mb    = 5120
-      disk_size_gb = 60
-      ip_address   = "192.168.1.21"
-    }
-  ]
 }

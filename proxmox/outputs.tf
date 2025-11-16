@@ -2,13 +2,13 @@
 output "k3s_nodes" {
   description = "K3s node information"
   value = {
-    for idx, vm in proxmox_virtual_environment_vm.k3s_nodes : vm.name => {
+    for name, vm in proxmox_virtual_environment_vm.k3s_nodes : vm.name => {
       id          = vm.vm_id
-      description = var.k3s_nodes[idx].description
-      ip          = var.k3s_nodes[idx].ip_address
+      description = vm.description
+      ip          = vm.initialization[0].ip_config[0].ipv4[0].address
       cores       = vm.cpu[0].cores
       memory      = vm.memory[0].dedicated
-      ssh         = "ssh ${var.ssh_user}@${var.k3s_nodes[idx].ip_address}"
+      ssh         = "ssh ${var.ssh_user}@${split("/", vm.initialization[0].ip_config[0].ipv4[0].address)[0]}"
     }
   }
 }
