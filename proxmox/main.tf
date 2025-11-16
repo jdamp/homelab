@@ -20,6 +20,42 @@ locals {
   }
 }
 
+// Cloud-init: generic user_data_config
+resource "proxmox_virtual_environment_file" "user_data_cloud_config" {
+  for_each = toset(var.cloud_image_nodes)
+  content_type = "snippets"
+  datastore_id = "local"
+  node_name    = each.value
+
+  source_raw {
+    data = <<-EOF
+    #cloud-config
+    preserve_hostname: true
+    timezone: Europe/Berlin
+    users:
+      - default
+      - name: ${var.ssh_user}
+        groups:
+          - sudo
+        shell: /bin/bash
+        ssh_authorized_keys:
+          - ${trimspace(data.local_file.ssh_public_key.content)}
+        sudo: ALL=(ALL) NOPASSWD:ALL
+    package_update: true
+    packages:
+      - qemu-guest-agent
+      - net-tools
+      - curl
+    runcmd:
+      - systemctl enable qemu-guest-agent
+      - systemctl start qemu-guest-agent
+      - echo "done" > /tmp/cloud-config.done
+    EOF
+
+    file_name = "user-data-cloud-config.yaml"
+  }
+}
+
 
 // K3s Cluster Nodes (Control Plane and Workers)
 resource "proxmox_virtual_environment_vm" "k3s_nodes" {
@@ -64,6 +100,8 @@ resource "proxmox_virtual_environment_vm" "k3s_nodes" {
 
   # Cloud-Init Configuration
   initialization {
+    user_data_file_id = proxmox_virtual_environment_file.user_data_cloud_config[each.value.proxmox_node].id
+
     ip_config {
       ipv4 {
         address = "${each.value.ip_address}/24"

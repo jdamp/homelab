@@ -19,4 +19,22 @@ pveum user token add terraform-user@pve terraform-token
 Make sure that priviledge separation is turned off for the API token.
 This way, it will have the same permissions as the role associated to the user.
 
+For some of the resources, e.g. handling cloud-init files, the terraform provider requires connection via
+ssh-key. For this purpose, follow these steps on the proxmox node:
+```bash
+# Create a linux user
+adduser --disabled-password --gecos "" terraform-user
+mkdir -p /home/terraform-user/.ssh
+chmod 700 /home/terraform-user/.ssh
+
+echo "ssh-ed25519 AA..." | tee /home/terraform-user/.ssh/authorized_keys
+chmod 600 /home/terraform-user/.ssh/authorized_keys
+chown -R terraform-user:terraform-user /home/terraform-user/.ssh
+```
+and give the user write access to the snippets directory:
+
+```bash
+chown -R terraform-user:terraform-user /var/lib/vz/snippets
+```
+
 ## Proxmox VM template
