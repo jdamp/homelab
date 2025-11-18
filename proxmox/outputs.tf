@@ -1,8 +1,8 @@
-# K3s Nodes Outputs
-output "k3s_nodes" {
-  description = "K3s node information"
+# K3s Control Plane Nodes Outputs
+output "k3s_control_plane_nodes" {
+  description = "K3s control plane node information"
   value = {
-    for name, vm in proxmox_virtual_environment_vm.k3s_nodes : vm.name => {
+    for name, vm in proxmox_virtual_environment_vm.k3s_control_plane : vm.name => {
       id          = vm.vm_id
       description = vm.description
       ip          = vm.initialization[0].ip_config[0].ipv4[0].address
@@ -13,15 +13,17 @@ output "k3s_nodes" {
   }
 }
 
-# Summary
-output "cluster_summary" {
-  description = "K3s cluster summary"
+# K3s Worker Nodes Outputs
+output "k3s_worker_nodes" {
+  description = "K3s worker node information"
   value = {
-    cluster_name       = var.cluster_name
-    node_ips           = [for node in var.k3s_nodes : node.ip_address]
-    total_nodes        = length(var.k3s_nodes)
-    total_cores        = sum([for node in var.k3s_nodes : node.cpu_cores])
-    total_memory_mb    = sum([for node in var.k3s_nodes : node.memory_mb])
-    total_disk_size_gb = sum([for node in var.k3s_nodes : node.disk_size_gb])
+    for name, vm in proxmox_virtual_environment_vm.k3s_worker : vm.name => {
+      id          = vm.vm_id
+      description = vm.description
+      ip          = vm.initialization[0].ip_config[0].ipv4[0].address
+      cores       = vm.cpu[0].cores
+      memory      = vm.memory[0].dedicated
+      ssh         = "ssh ${var.ssh_user}@${split("/", vm.initialization[0].ip_config[0].ipv4[0].address)[0]}"
+    }
   }
 }

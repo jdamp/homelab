@@ -69,9 +69,23 @@ variable "cluster_name" {
   default     = "k3s"
 }
 
-# K3s Nodes Configuration (Control Plane and Workers)
-variable "k3s_nodes" {
-  description = "List of K3s nodes (control plane and workers)"
+# K3s Control Plane Nodes Configuration
+variable "k3s_control_plane_nodes" {
+  description = "List of K3s control plane nodes"
+  type = list(object({
+    name         = string
+    description  = string
+    proxmox_node = string
+    cpu_cores    = number
+    memory_mb    = number
+    disk_size_gb = number
+    ip_address   = string
+  }))
+}
+
+# K3s Worker Nodes Configuration
+variable "k3s_worker_nodes" {
+  description = "List of K3s worker nodes"
   type = list(object({
     name         = string
     description  = string

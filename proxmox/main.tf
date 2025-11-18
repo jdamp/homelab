@@ -57,10 +57,10 @@ resource "proxmox_virtual_environment_file" "user_data_cloud_config" {
 }
 
 
-// K3s Cluster Nodes (Control Plane and Workers)
-resource "proxmox_virtual_environment_vm" "k3s_nodes" {
+// K3s Control Plane Nodes
+resource "proxmox_virtual_environment_vm" "k3s_control_plane" {
   for_each = {
-    for node in var.k3s_nodes : node.name => node
+    for node in var.k3s_control_plane_nodes : node.name => node
   }
   name        = "${each.value.name}"
   description = each.value.description
@@ -123,3 +123,80 @@ resource "proxmox_virtual_environment_vm" "k3s_nodes" {
     ]
   }
 }
+
+// K3s Worker Nodes
+resource "proxmox_virtual_environment_vm" "k3s_worker" {
+  for_each = {
+    for node in var.k3s_worker_nodes : node.name => node
+  }
+  name        = "${each.value.name}"
+  description = each.value.description
+  node_name   = each.value.proxmox_node
+  stop_on_destroy = true
+
+  # CPU Configuration
+  cpu {
+    cores = each.value.cpu_cores
+    type  = "host"
+  }
+
+  # Memory Configuration
+  memory {
+    dedicated = each.value.memory_mb
+  }
+
+  # Enable QEMU agent
+  agent {
+    enabled = true
+  }
+
+  # Disk Configuration
+  disk {
+    datastore_id = "local-lvm"
+    import_from  = local.cloud_image_ids[each.value.proxmox_node]
+    interface    = "virtio0"
+    iothread     = true
+    discard      = "on"
+    size         = each.value.disk_size_gb
+  }
+
+  # Network Configuration
+  network_device {
+    bridge = var.network_bridge
+  }
+
+  # Cloud-Init Configuration
+  initialization {
+    user_data_file_id = proxmox_virtual_environment_file.user_data_cloud_config[each.value.proxmox_node].id
+
+    ip_config {
+      ipv4 {
+        address = "${each.value.ip_address}/24"
+        gateway = var.gateway
+      }
+    }
+
+    user_account {
+      username = var.ssh_user
+      keys     = [trimspace(data.local_file.ssh_public_key.content)]
+    }
+  }
+
+  # Lifecycle
+  lifecycle {
+    ignore_changes = [
+      network_device,
+      disk,
+    ]
+  }
+}
+
+
+# resource "local_file" "ansible_inventory" {
+#   content = templatefile("${path.module}/inventory.tpl", {
+    
+#   })
+
+#   filename = "${path.module}/inventory.ini"
+#   file_permission = "0644"
+# }

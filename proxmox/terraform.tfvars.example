@@ -21,9 +21,9 @@ ssh_public_key_path = "~/.ssh/id_rsa.pub"
 # K3s Cluster Configuration
 cluster_name = "k3s"
 
-# K3s Nodes (Control Plane and Workers)
-# Add or remove nodes as needed
-k3s_nodes = [
+# K3s Control Plane Nodes
+# Add or remove control plane nodes as needed
+k3s_control_plane_nodes = [
   {
     name         = "control-01"
     description  = "K3s Control Plane Node 1"
@@ -32,7 +32,12 @@ k3s_nodes = [
     memory_mb    = 4096
     disk_size_gb = 40
     ip_address   = "192.168.1.10"
-  },
+  }
+]
+
+# K3s Worker Nodes
+# Add or remove worker nodes as needed
+k3s_worker_nodes = [
   {
     name         = "worker-01"
     description  = "K3s Worker Node 1"
