@@ -192,11 +192,13 @@ resource "proxmox_virtual_environment_vm" "k3s_worker" {
 }
 
 
-# resource "local_file" "ansible_inventory" {
-#   content = templatefile("${path.module}/inventory.tpl", {
-    
-#   })
+resource "local_file" "ansible_inventory" {
+  content = templatefile("${path.module}/inventory.tpl", {
+      control_plane=proxmox_virtual_environment_vm.k3s_control_plane
+      worker_nodes=proxmox_virtual_environment_vm.k3s_worker
+      ssh_key_path=data.local_file.ssh_public_key.filename
+   })
 
-#   filename = "${path.module}/inventory.ini"
-#   file_permission = "0644"
-# }
+   filename = "${path.module}/inventory.ini"
+   file_permission = "0644"
+ }
