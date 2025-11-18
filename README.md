@@ -6,3 +6,4 @@ Using proxmox, multiple VMs will be run on this node for a k3s cluster.
 
 ## Repository structure
 - The `proxmox` folder contains the configuration for the proxmox VMs on the physical hosts
+- The `k3s` folder contains Ansible playbooks which set up the installation of k3s on the VM nodes
