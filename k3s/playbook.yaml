@@ -1,9 +1,65 @@
-- name: My first play
-  hosts: worker_nodes
+# Install and configure k3s control plane
+# NOTE: Will only work with one control plane node for now
+- name: Install and configure k3s control plane
+  hosts: control_plane
+  become: yes
   tasks:
-   - name: Ping my hosts
-     ansible.builtin.ping:
+    - name: Download k3s
+      get_url:
+        url: https://get.k3s.io/
+        timeout: 120
+        dest: /usr/local/bin/k3s-install.sh
+        owner: root
+        group: root
+        mode: "0755"
 
-   - name: Print message
-     ansible.builtin.debug:
-       msg: Hello world
+    - name: Install k3s control plane
+      command:
+        cmd: /usr/local/bin/k3s-install.sh
+        creates: /usr/local/bin/k3s
+
+    - name: Wait for token
+      wait_for:
+        path: /var/lib/rancher/k3s/server/token
+
+    - name: Read node-token from master
+      slurp:
+        src: /var/lib/rancher/k3s/server/token
+      register: node_token_base64
+
+    - name: Decode and set token variable
+      set_fact:
+        k3s_token: "{{ node_token_base64.content | b64decode | trim }}"
+
+    - name: Get Control Plane IP
+      set_fact:
+        control_plane_ip: "{{ ansible_host }}"
+      
+# Install and configure k3s worker nodes
+- name: Install and configure k3s worker nodes
+  hosts: worker_nodes
+  become: yes
+  tasks:
+    - name: Get token from control plane
+      set_fact:
+        k3s_token: "{{ hostvars[groups['control_plane'][0]].k3s_token }}"
+    - name: Get Control Plane IP
+      set_fact:
+        control_plane_ip: "{{ hostvars[groups['control_plane'][0]].control_plane_ip }}"
+
+    - name: Download k3s
+      get_url:
+        url: https://get.k3s.io/
+        timeout: 120
+        dest: /usr/local/bin/k3s-install.sh
+        owner: root
+        group: root
+        mode: "0755"
+    
+    - name: Install k3s worker node
+      command:
+        cmd: /usr/local/bin/k3s-install.sh
+        creates: /usr/local/bin/k3s
+      environment:
+        K3S_URL: "https://{{ control_plane_ip }}:6443"
+        K3S_TOKEN: "{{ k3s_token }}"  
