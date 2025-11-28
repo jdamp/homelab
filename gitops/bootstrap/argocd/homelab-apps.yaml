@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: homelab-apps
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/jdamp/homelab
+        revision: HEAD
+        files:
+          - path: gitops/infra/core/*
+          - path: gitops/infra/apps/*
+
+  template:
+    metadata:
+      # .path.basename resolves to the folder name
+      name: '{{.path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/my-user/homelab-gitops.git
+        targetRevision: HEAD
+        # .path.path resolves to the full path (e.g., "gitops/infra/apps/my-app")
+        path: '{{.path.path}}'
+
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{.path.basename}}' 
+ 
+      syncPolicy:
+        # automated:
+        #   prune: true
+        #   selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
