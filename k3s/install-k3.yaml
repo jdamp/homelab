@@ -17,6 +17,8 @@
       command:
         cmd: /usr/local/bin/k3s-install.sh
         creates: /usr/local/bin/k3s
+      environment:
+        INSTALL_K3S_EXEC: "--disable servicelb"
 
     - name: Wait for token
       wait_for:
@@ -34,6 +36,13 @@
     - name: Get Control Plane IP
       set_fact:
         control_plane_ip: "{{ ansible_host }}"
+
+    - name: Wait for k3s API server to be ready
+      wait_for:
+        host: "{{ ansible_host }}"
+        port: 6443
+        delay: 5
+        timeout: 300
       
 # Install and configure k3s worker nodes
 - name: Install and configure k3s worker nodes
