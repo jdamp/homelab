@@ -8,7 +8,7 @@ spec:
     - git:
         repoURL: https://github.com/jdamp/homelab
         revision: HEAD
-        files:
+        directories:
           - path: gitops/infra/core/*
           - path: gitops/infra/apps/*
 
@@ -19,7 +19,7 @@ spec:
     spec:
       project: default
       source:
-        repoURL: https://github.com/my-user/homelab-gitops.git
+        repoURL: https://github.com/jdamp/homelab
         targetRevision: HEAD
         # .path.path resolves to the full path (e.g., "gitops/infra/apps/my-app")
         path: '{{.path.path}}'
