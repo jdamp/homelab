@@ -6,7 +6,3 @@ resources:
 - namespace.yaml
 - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 - applicationset.yaml
-- sops-age-secret.yaml
-
-patches:
-- path: repo-server-patch.yaml
