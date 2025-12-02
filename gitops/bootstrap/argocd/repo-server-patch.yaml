@@ -1,0 +1,55 @@
+# Strategic merge patch for argocd-repo-server Deployment
+# Adds kustomize-sops plugin support for decrypting SOPS-encrypted secrets
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-repo-server
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: install-ksops
+        image: alpine:3.22
+        command:
+        - sh
+        - -c
+        - |
+          set -e
+          echo "Installing kustomize-sops v4.4.0..."
+        
+          apk add --no-cache curl
+          
+          KSOPS_VERSION=4.4.0
+          curl -sL "https://github.com/viaduct-ai/kustomize-sops/releases/download/v${KSOPS_VERSION}/ksops_${KSOPS_VERSION}_Linux_x86_64.tar.gz" | \
+            tar xz -C /custom-tools/
+          
+          chmod +x /custom-tools/ksops
+          
+          echo "kustomize-sops installed successfully"
+        volumeMounts:
+        - name: custom-tools
+          mountPath: /custom-tools
+      
+      containers:
+      - name: argocd-repo-server
+        env:
+        - name: SOPS_AGE_KEY_FILE
+          value: /.config/sops/age/keys.txt
+        - name: XDG_CONFIG_HOME
+          value: /.config
+        volumeMounts:
+        - name: custom-tools
+          mountPath: /usr/local/bin/ksops
+          subPath: ksops
+        - name: sops-age
+          mountPath: /.config/sops/age/keys.txt
+          subPath: keys.txt
+          readOnly: true
+      
+      volumes:
+      - name: custom-tools
+        emptyDir: {}
+      - name: sops-age
+        secret:
+          secretName: sops-age
+          defaultMode: 0400
