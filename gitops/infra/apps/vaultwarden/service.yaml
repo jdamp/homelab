@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vaultwarden-service
+  labels:
+    app: vaultwarden
+spec:
+
+  type: ClusterIP 
+  selector:
+    app: vaultwarden
+  ports:
+    - protocol: TCP
+      port: 80 
+      targetPort: 80
+      name: http
