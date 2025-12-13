@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb-deployment
+  labels:
+    app: hortusfox-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hortusfox-db
+  template:
+    metadata:
+      labels:
+        app: hortusfox-db
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: mariadb
+        image: mariadb:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: hortusfox-secrets
+              key: mariadb-root-password
+        - name: MARIADB_DATABASE
+          value: "hortusfox"
+        - name: MARIADB_USER
+          value: "user"
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: hortusfox-secrets
+              key: mariadb-password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mariadb-storage
+          mountPath: /var/lib/mysql
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - bash
+            - -c
+            - mariadb-admin -u ${MARIADB_USER} -p${MARIADB_PASSWORD} -h 127.0.0.1 ping
+          periodSeconds: 10
+        startupProbe:
+          exec:
+            command:
+            - bash
+            - -c
+            - mariadb -u ${MARIADB_USER} -p${MARIADB_PASSWORD} -h 127.0.0.1 -e "SELECT 1"
+          periodSeconds: 10
+          failureThreshold: 30
+      volumes:
+      - name: mariadb-storage
+        persistentVolumeClaim:
+          claimName: mariadb-data-pvc
