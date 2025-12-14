@@ -3,7 +3,6 @@ nfs-subdir-external-provisioner:
     server: 192.168.0.60
     path: /volume1/k3s
   
-  # Optional: specific storage class config
   storageClass:
-    name: nfs-client
+    name: nfs-nas
     defaultClass: true
