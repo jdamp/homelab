@@ -4,5 +4,5 @@ nfs-subdir-external-provisioner:
     path: /volume1/k3s
   
   storageClass:
-    name: nfs-nas
+    name: nfs-nas # Name of the storage class to create
     defaultClass: true
