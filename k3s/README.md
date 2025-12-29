@@ -10,14 +10,14 @@ ssh-add ~/.ssh/id_ed25519
 Run ansible using uv:
 
 ```bash
-uvx --from ansible-core ansible-playbook playbook.yaml
+uvx --from ansible-core ansible-playbook install-k3s.yaml
 ```
 
 
 Receive the kubeconfig file for the cluster from the control node and update the IP address accordingly.
 ```bash
-ssh debian@192.168.0.10 sudo chmod 644 /etc/rancher/k3s/k3s.yaml
-scp debian@192.168.0.10:/etc/rancher/k3s/k3s.yaml ~/.kube/config
-ssh debian@192.168.0.10 sudo chmod 600 /etc/rancher/k3s/k3s.yaml
-sed -i 's/127.0.0.1/192.168.0.10/g' ~/.kube/config
+ssh debian@192.168.0.100 sudo chmod 644 /etc/rancher/k3s/k3s.yaml
+scp debian@192.168.0.100:/etc/rancher/k3s/k3s.yaml ~/.kube/config
+ssh debian@192.168.0.100 sudo chmod 600 /etc/rancher/k3s/k3s.yaml
+sed -i 's/127.0.0.1/192.168.0.100/g' ~/.kube/config
 ```
