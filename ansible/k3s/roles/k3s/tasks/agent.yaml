@@ -1,0 +1,18 @@
+- name: Get token from master control plane
+  ansible.builtin.set_fact:
+    k3s_token: "{{ hostvars[groups['control_plane'][0]].k3s_token }}"
+
+- name: Get master control plane IP
+  ansible.builtin.set_fact:
+    master_control_plane_ip: "{{ hostvars[groups['control_plane'][0]].master_control_plane_ip }}"
+
+- name: Download installer
+  ansible.builtin.include_tasks: download.yaml
+
+- name: Install k3s worker node
+  ansible.builtin.command:
+    cmd: "{{ k3s_install_script_path }}"
+    creates: "{{ k3s_binary_path }}"
+  environment:
+    K3S_URL: "https://{{ master_control_plane_ip }}:{{ k3s_api_port }}"
+    K3S_TOKEN: "{{ k3s_token }}"

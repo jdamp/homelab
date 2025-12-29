@@ -1,0 +1,8 @@
+- name: Download k3s install script
+  ansible.builtin.get_url:
+    url: "{{ k3s_install_script_url }}"
+    timeout: "{{ k3s_install_timeout }}"
+    dest: "{{ k3s_install_script_path }}"
+    owner: root
+    group: root
+    mode: "0755"

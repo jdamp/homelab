@@ -1,0 +1,26 @@
+- name: Install and configure k3s master control plane node
+  hosts: control_plane[0]
+  become: true
+  gather_facts: false
+  roles:
+    - role: k3s
+      vars:
+        k3s_mode: server_init
+
+- name: Install and configure additional k3s control plane nodes
+  hosts: control_plane[1:]
+  become: true
+  gather_facts: false
+  roles:
+    - role: k3s
+      vars:
+        k3s_mode: server_join
+
+- name: Install and configure k3s worker nodes
+  hosts: worker_nodes
+  become: true
+  gather_facts: false
+  roles:
+    - role: k3s
+      vars:
+        k3s_mode: agent

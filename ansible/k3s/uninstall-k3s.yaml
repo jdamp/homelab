@@ -1,0 +1,17 @@
+- name: Uninstall k3s from worker nodes
+  hosts: worker_nodes
+  become: true
+  gather_facts: false
+  roles:
+    - role: k3s_uninstall
+      vars:
+        k3s_uninstall_mode: agent
+
+- name: Uninstall k3s from control plane
+  hosts: control_plane
+  become: true
+  gather_facts: false
+  roles:
+    - role: k3s_uninstall
+      vars:
+        k3s_uninstall_mode: server

@@ -1,0 +1,9 @@
+- name: Validate k3s_mode
+  ansible.builtin.assert:
+    that:
+      - k3s_mode is defined
+      - k3s_mode in ['server_init', 'server_join', 'agent']
+    fail_msg: "Set k3s_mode to one of: server_init, server_join, agent"
+
+- name: Run k3s tasks
+  ansible.builtin.include_tasks: "{{ k3s_mode }}.yaml"

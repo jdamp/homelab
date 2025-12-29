@@ -9,8 +9,8 @@ spec:
         repoURL: https://github.com/jdamp/homelab
         revision: HEAD
         directories:
-          - path: gitops/infra/core/*
-          - path: gitops/infra/apps/*
+          - path: kubernetes/core/*
+          - path: kubernetes/apps/*
 
   template:
     metadata:

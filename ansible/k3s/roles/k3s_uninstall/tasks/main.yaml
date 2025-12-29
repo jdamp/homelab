@@ -1,0 +1,9 @@
+- name: Validate k3s_uninstall_mode
+  ansible.builtin.assert:
+    that:
+      - k3s_uninstall_mode is defined
+      - k3s_uninstall_mode in ['server', 'agent']
+    fail_msg: "Set k3s_uninstall_mode to one of: server, agent"
+
+- name: Run k3s uninstall tasks
+  ansible.builtin.include_tasks: "{{ k3s_uninstall_mode }}.yaml"
