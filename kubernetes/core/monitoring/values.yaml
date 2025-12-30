@@ -2,7 +2,14 @@ victoria-metrics-k8s-stack:
   
   grafana:
     enabled: true
-
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.tls: "true"
+      hosts:
+        - grafana.home
   # Disable the complex cluster version
   vmcluster:
     enabled: false

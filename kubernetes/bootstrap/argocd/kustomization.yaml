@@ -7,3 +7,16 @@ resources:
 - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 - applicationset-core.yaml
 - applicationset-apps.yaml
+- ingress.yaml
+
+# This patch adds the "--insecure" flag to the argocd-server deployment
+# see https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#traefik-v30
+patches:
+  - target:
+      group: apps
+      kind: Deployment
+      name: argocd-server
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: "--insecure"
