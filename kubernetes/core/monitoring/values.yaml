@@ -11,10 +11,15 @@ victoria-metrics-k8s-stack:
   vmsingle:
     enabled: true
     spec:
-      retentionPeriod: "14d"
+      retentionPeriod: "30d"
       resources:
         limits:
           memory: "512Mi"
+      storage:
+        storageClassName: nfs-nas
+        resources:
+          requests:
+            storage: "10Gi"
           
   # Optional: Disable HA/Replica settings for Alertmanager to save RAM
   alertmanager:
