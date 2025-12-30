@@ -17,6 +17,8 @@ spec:
       annotations:
         # Higher sync wave to ensure apps are deployed after core components
         argocd.argoproj.io/sync-wave: "1"
+      labels:
+        app.kubernetes.io/part-of: apps
     spec:
       project: default
       source:
