@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: homelab-apps
+  name: homelab-core
 spec:
   goTemplate: true
   generators:
@@ -10,18 +10,18 @@ spec:
         revision: HEAD
         directories:
           - path: kubernetes/core/*
-          - path: kubernetes/apps/*
 
   template:
     metadata:
-      # .path.basename resolves to the folder name
       name: '{{.path.basename}}'
+      annotations:
+        # Lower sync wave to ensure core components are deployed first
+        argocd.argoproj.io/sync-wave: "0"
     spec:
       project: default
       source:
         repoURL: https://github.com/jdamp/homelab
         targetRevision: HEAD
-        # .path.path resolves to the full path (e.g., "gitops/infra/apps/my-app")
         path: '{{.path.path}}'
 
       destination:
@@ -29,8 +29,8 @@ spec:
         namespace: '{{.path.basename}}' 
  
       syncPolicy:
-        # automated:
-        #   prune: true
-        #   selfHeal: true
+        automated:
+          prune: true
+          selfHeal: true
         syncOptions:
           - CreateNamespace=true
