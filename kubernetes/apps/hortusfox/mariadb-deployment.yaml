@@ -52,14 +52,14 @@ spec:
             command:
             - bash
             - -c
-            - mariadb-admin -u ${MARIADB_USER} -p${MARIADB_PASSWORD} -h 127.0.0.1 ping
+            - mariadb-admin -u "${MARIADB_USER}" -p"${MARIADB_PASSWORD}" -h 127.0.0.1 ping
           periodSeconds: 10
         startupProbe:
           exec:
             command:
             - bash
             - -c
-            - mariadb -u ${MARIADB_USER} -p${MARIADB_PASSWORD} -h 127.0.0.1 -e "SELECT 1"
+            - mariadb -u "${MARIADB_USER}" -p"${MARIADB_PASSWORD}" -h 127.0.0.1 -e "SELECT 1"
           periodSeconds: 10
           failureThreshold: 30
       volumes:
