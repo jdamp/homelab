@@ -14,3 +14,7 @@ inventory.ini
 # Helm
 Chart.lock
 **/charts/*.tgz
+
+# Kubernetes
+*secrets*.yaml
+!sealed-secrets.yaml
