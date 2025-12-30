@@ -4,10 +4,11 @@ kind: Kustomization
 namespace: hortusfox
 
 resources:
-  - mariadb-pvc.yaml
+  - mariadb-volume.yaml
   - mariadb-deployment.yaml
   - mariadb-service.yaml
   - app-pvc.yaml
   - app-deployment.yaml
   - app-service.yaml
+  - app-ingress.yaml
   - secrets.yaml

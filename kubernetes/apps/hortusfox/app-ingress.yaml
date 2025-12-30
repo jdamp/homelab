@@ -1,0 +1,15 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hortusfox-ingress
+  namespace: hortusfox
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`plants.home`)
+      services:
+        - name: hortusfox-service
+          port: 80
+  tls: {}
