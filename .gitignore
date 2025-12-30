@@ -10,3 +10,7 @@
 
 # Ansible
 inventory.ini
+
+# Helm
+Chart.lock
+**/charts/*.tgz

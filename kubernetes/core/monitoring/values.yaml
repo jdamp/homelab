@@ -1,0 +1,23 @@
+victoria-metrics-k8s-stack:
+  
+  grafana:
+    enabled: true
+
+  # Disable the complex cluster version
+  vmcluster:
+    enabled: false
+
+  # Enable the efficient single binary version
+  vmsingle:
+    enabled: true
+    spec:
+      retentionPeriod: "14d"
+      resources:
+        limits:
+          memory: "512Mi"
+          
+  # Optional: Disable HA/Replica settings for Alertmanager to save RAM
+  alertmanager:
+    enabled: true
+    spec:
+      replicaCount: 1
