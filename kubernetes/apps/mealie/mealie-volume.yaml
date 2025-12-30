@@ -10,7 +10,7 @@ spec:
   iscsi:
     targetPortal: 192.168.0.60:3260
     iqn: iqn.2025-03.com.ugreen:mealie
-    lun: 1
+    lun: 0
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
