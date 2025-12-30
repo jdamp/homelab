@@ -57,6 +57,7 @@ resource "proxmox_virtual_environment_file" "user_data_cloud_config" {
       - net-tools
       - curl
       - nfs-common
+      - open-iscsi
     runcmd:
       - systemctl enable qemu-guest-agent
       - systemctl start qemu-guest-agent
