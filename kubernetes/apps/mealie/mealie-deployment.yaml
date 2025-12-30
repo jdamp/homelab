@@ -30,7 +30,7 @@ spec:
             - name: TZ
               value: "America/Anchorage"
             - name: BASE_URL
-              value: "http://localhost"
+              value: "https://mealie.home"
           resources:
             requests:
               cpu: 100m
@@ -44,4 +44,4 @@ spec:
       volumes:
         - name: mealie-data
           persistentVolumeClaim:
-            claimName: mealie-data-pvc
+            claimName: mealie-pvc
