@@ -5,7 +5,10 @@ metadata:
 spec:
   capacity:
     storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
   iscsi:
+    targetPortal: 192.168.0.60:3260
     # Naming the target specifically after the app
     iqn: iqn.2025-03.com.ugreen:hortusfox-mariadb
     lun: 0
