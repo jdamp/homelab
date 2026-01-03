@@ -8,7 +8,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`plants.home`)
+      match: Host(`plants.lab.home`)
       services:
         - name: hortusfox-service
           port: 80
