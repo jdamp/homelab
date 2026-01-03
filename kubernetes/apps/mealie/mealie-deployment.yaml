@@ -28,9 +28,9 @@ spec:
             - name: PGID
               value: "1000"
             - name: TZ
-              value: "America/Anchorage"
+              value: "Europe/Berlin"
             - name: BASE_URL
-              value: "https://mealie.home"
+              value: "https://futter.mauzlab.de"
           resources:
             requests:
               cpu: 100m

@@ -8,18 +8,18 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`argocd.lab.home`)
+      match: Host(`argocd.mauzlab.de`)
       priority: 10
       services:
         - name: argocd-server
           port: 80
     - kind: Rule
-      match: Host(`argocd.lab.home`) && Header(`Content-Type`, `application/grpc`)
+      match: Host(`argocd.mauzlab.de`) && Header(`Content-Type`, `application/grpc`)
       priority: 11
       services:
         - name: argocd-server
           port: 80
           scheme: h2c
-  # use the default Traefik self-signed cert
+  # use the default Traefik cert
   tls: {}    
     

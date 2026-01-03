@@ -31,9 +31,9 @@ spec:
         namespace: '{{.path.basename}}' 
  
       syncPolicy:
-        #automated:
-        #  prune: true
-        #  selfHeal: true
+        automated:
+          prune: true
+          selfHeal: true
         syncOptions:
           - CreateNamespace=true
           # Some apps include large resources include annotations that exceed the size limit for

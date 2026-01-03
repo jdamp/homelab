@@ -8,7 +8,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`mealie.lab.home`)
+      match: Host(`futter.mauzlab.de`)
       services:
         - name: mealie-service
           port: 80

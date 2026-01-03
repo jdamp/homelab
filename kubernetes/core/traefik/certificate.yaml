@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mauzlab-certificate
+  namespace: kube-system
+spec:
+  secretName: mauzlab-wildcard-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: "*.mauzlab.de"
+  dnsNames:
+  - "mauzlab.de"
+  - "*.mauzlab.de"
