@@ -13,6 +13,13 @@ resources:
 # see https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#traefik-v30
 patches:
   - target:
+      kind: ConfigMap
+      name: argocd-cm
+    patch: |-
+      - op: add
+        path: /data/kustomize.buildOptions
+        value: "--enable-helm"
+  - target:
       group: apps
       kind: Deployment
       name: argocd-server
