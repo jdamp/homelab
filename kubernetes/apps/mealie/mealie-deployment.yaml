@@ -31,6 +31,33 @@ spec:
               value: "Europe/Berlin"
             - name: BASE_URL
               value: "https://futter.mauzlab.de"
+            - name: DB_ENGINE
+              value: "postgres"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mealie-postgres-app
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mealie-postgres-app
+                  key: password
+            - name: POSTGRES_SERVER
+              valueFrom:
+                secretKeyRef:
+                  name: mealie-postgres-app
+                  key: host
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: mealie-postgres-app
+                  key: port
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: mealie-postgres-app
+                  key: dbname
           resources:
             requests:
               cpu: 100m

@@ -8,3 +8,4 @@ resources:
   - mealie-deployment.yaml
   - mealie-service.yaml
   - mealie-ingress.yaml
+  - mealie-postgres.yaml

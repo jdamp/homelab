@@ -1,0 +1,58 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: mealie-postgres
+  namespace: mealie
+spec:
+  instances: 1
+  imageName: postgres:17
+  
+  storage:
+    size: 2Gi
+    storageClass: localPath
+  bootstrap:
+    initdb:
+      database: mealie
+      owner: mealie
+
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: nas-s3-store 
+
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: nas-s3-store
+  namespace: mealie
+spec:
+  configuration:
+    destinationPath: s3://backups/mealie/
+    endpointURL: http://192.168.0.60:43443
+    s3Credentials:
+      accessKeyId:
+        name: mealie-secrets
+        key: S3_ACCESS_KEY_ID
+      secretAccessKey:
+        name: mealie-secrets
+        key: S3_ACCESS_SECRET_KEY
+    wal:
+      compression: gzip
+
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: mealie-weekly-backup
+  namespace: mealie
+spec:
+  schedule: "0 3 * * 0"
+  cluster:
+    name: mealie-postgres
