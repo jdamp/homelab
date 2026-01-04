@@ -9,3 +9,5 @@ resources:
   - mealie-service.yaml
   - mealie-ingress.yaml
   - mealie-postgres.yaml
+  - mealie-sealed-secrets.yaml
+
