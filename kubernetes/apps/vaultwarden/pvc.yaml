@@ -5,7 +5,7 @@ metadata:
   labels:
     app: vaultwarden
 spec:
-  storageClassName: local-path
+  storageClassName: nfs-nas
   accessModes:
     - ReadWriteOnce
   resources:

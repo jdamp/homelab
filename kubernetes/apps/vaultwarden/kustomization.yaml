@@ -4,6 +4,10 @@ kind: Kustomization
 namespace: vaultwarden
 
 resources:
+  - ../../base/postgres-cluster
   - deployment.yaml
   - service.yaml
   - pvc.yaml
+
+patches:
+  - path: postgres-patches.yaml

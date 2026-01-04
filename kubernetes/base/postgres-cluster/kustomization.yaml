@@ -5,3 +5,4 @@ resources:
   - cluster.yaml
   - objectstore.yaml
   - scheduled-backup.yaml
+  - s3-sealed-secrets.yaml

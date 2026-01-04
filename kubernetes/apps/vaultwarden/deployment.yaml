@@ -17,11 +17,16 @@ spec:
       restartPolicy: Always
       containers:
       - name: vaultwarden
-        image: vaultwarden/server:latest
+        image: vaultwarden/server:1.35.1-alpine
         imagePullPolicy: IfNotPresent
         env:
         - name: DOMAIN
-          value: "http://localhost"
+          value: "https://passwort.mauzlab.de"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: postgres-cluster-app
+              key: uri
         ports:
         - containerPort: 80
           name: http

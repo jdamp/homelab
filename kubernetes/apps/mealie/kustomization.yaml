@@ -9,7 +9,6 @@ resources:
   - mealie-deployment.yaml
   - mealie-service.yaml
   - mealie-ingress.yaml
-  - mealie-sealed-secrets.yaml
 
 patches:
   - path: postgres-patches.yaml
