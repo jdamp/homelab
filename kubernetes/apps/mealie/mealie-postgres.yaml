@@ -9,7 +9,7 @@ spec:
   
   storage:
     size: 2Gi
-    storageClass: localPath
+    storageClass: local-path
   bootstrap:
     initdb:
       database: mealie
