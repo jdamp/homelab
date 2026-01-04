@@ -1,7 +1,7 @@
 # Jellyfin Helm chart values
 # Uses jellyfin-helm chart: https://github.com/jellyfin/jellyfin-helm
 
-jellyfin-helm:
+jellyfin:
   ingress:
     enabled: true
     className: traefik
