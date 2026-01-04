@@ -56,3 +56,6 @@ spec:
   schedule: "0 3 * * 0"
   cluster:
     name: mealie-postgres
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
