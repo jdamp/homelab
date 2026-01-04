@@ -5,7 +5,7 @@ metadata:
   namespace: mealie
 spec:
   instances: 1
-  imageName: postgres:17
+  imageName: ghcr.io/cloudnative-pg/postgresql:18
   
   storage:
     size: 2Gi
