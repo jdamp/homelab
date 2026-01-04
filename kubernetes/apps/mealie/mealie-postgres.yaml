@@ -53,7 +53,8 @@ metadata:
   name: mealie-weekly-backup
   namespace: mealie
 spec:
-  schedule: "0 3 * * 0"
+  # Format: Sec Min Hour Day Month DayOfWeek
+  schedule: "0 0 3 * * 0"
   cluster:
     name: mealie-postgres
   method: plugin
