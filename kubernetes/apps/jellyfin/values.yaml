@@ -1,0 +1,47 @@
+# Jellyfin Helm chart values
+# Uses jellyfin-helm chart: https://github.com/jellyfin/jellyfin-helm
+
+jellyfin-helm:
+  ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+    hosts:
+      - host: kino.mauzlab.de
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - hosts:
+          - kino.mauzlab.de
+
+  persistence:
+    config:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 5Gi
+      storageClass: nfs-nas
+
+    media:
+      enabled: true
+      type: pvc
+      accessMode: ReadWriteOnce
+      size: 100Gi
+      storageClass: nfs-nas
+
+    cache:
+      enabled: true
+      type: pvc
+      accessMode: ReadWriteOnce
+      size: 10Gi
+      storageClass: local-path
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      memory: 4Gi
+
