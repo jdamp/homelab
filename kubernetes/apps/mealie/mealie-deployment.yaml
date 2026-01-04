@@ -36,27 +36,27 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: mealie-postgres-app
+                  name: postgres-cluster-app
                   key: username
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mealie-postgres-app
+                  name: postgres-cluster-app
                   key: password
             - name: POSTGRES_SERVER
               valueFrom:
                 secretKeyRef:
-                  name: mealie-postgres-app
+                  name: postgres-cluster-app
                   key: host
             - name: POSTGRES_PORT
               valueFrom:
                 secretKeyRef:
-                  name: mealie-postgres-app
+                  name: postgres-cluster-app
                   key: port
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: mealie-postgres-app
+                  name: postgres-cluster-app
                   key: dbname
           resources:
             requests:

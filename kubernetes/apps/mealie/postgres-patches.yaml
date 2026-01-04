@@ -1,0 +1,26 @@
+# Patches to customize the postgres-cluster base for mealie
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-cluster
+spec:
+  bootstrap:
+    initdb:
+      database: mealie
+      owner: mealie
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: nas-s3-store
+spec:
+  configuration:
+    destinationPath: s3://backups/mealie/
+    s3Credentials:
+      accessKeyId:
+        name: mealie-secrets
+        key: S3_ACCESS_KEY_ID
+      secretAccessKey:
+        name: mealie-secrets
+        key: S3_ACCESS_SECRET_KEY

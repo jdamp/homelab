@@ -4,10 +4,12 @@ kind: Kustomization
 namespace: mealie
 
 resources:
+  - ../../base/postgres-cluster
   - mealie-volume.yaml
   - mealie-deployment.yaml
   - mealie-service.yaml
   - mealie-ingress.yaml
-  - mealie-postgres.yaml
   - mealie-sealed-secrets.yaml
 
+patches:
+  - path: postgres-patches.yaml
