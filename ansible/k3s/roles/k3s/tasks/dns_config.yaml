@@ -1,0 +1,12 @@
+- name: Create k3s config directory
+  ansible.builtin.file:
+    path: /etc/rancher/k3s
+    state: directory
+    mode: '0755'
+
+- name: Create custom resolv.conf for k3s
+  ansible.builtin.copy:
+    dest: /etc/rancher/k3s/resolv.conf
+    content: |
+      nameserver {{ k3s_upstream_dns | default('192.168.178.1') }}
+    mode: '0644'

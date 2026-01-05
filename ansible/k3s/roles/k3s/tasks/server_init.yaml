@@ -1,13 +1,16 @@
 - name: Download installer
   ansible.builtin.include_tasks: download.yaml
 
+- name: Configure DNS for k3s
+  ansible.builtin.include_tasks: dns_config.yaml
+
 - name: Install k3s master control plane
   ansible.builtin.command:
     cmd: "{{ k3s_install_script_path }}"
     creates: "{{ k3s_binary_path }}"
   environment:
     INSTALL_K3S_EXEC: >-
-      {{ (k3s_disable_servicelb | bool) | ternary('--disable servicelb ', '') }}--cluster-init
+      {{ (k3s_disable_servicelb | bool) | ternary('--disable servicelb ', '') }}--cluster-init --resolv-conf /etc/rancher/k3s/resolv.conf
 
 - name: Wait for token
   ansible.builtin.wait_for:

@@ -39,7 +39,7 @@ uvx --from ansible-core ansible-playbook uninstall-k3s.yaml
 Replace `CONTROL_PLANE_IP` with the first control-plane node IP.
 
 ```bash
-CONTROL_PLANE_IP=192.168.0.110
+CONTROL_PLANE_IP=192.168.178.10
 mkdir -p ~/.kube
 ssh debian@${CONTROL_PLANE_IP} 'sudo cat /etc/rancher/k3s/k3s.yaml' > ~/.kube/config
 sed -i "s/127.0.0.1/${CONTROL_PLANE_IP}/g" ~/.kube/config

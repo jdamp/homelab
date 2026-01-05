@@ -6,7 +6,7 @@ spec:
   retentionPolicy: "30d"
   configuration:
     destinationPath: s3://backups/postgres/
-    endpointURL: http://192.168.0.60:43443
+    endpointURL: http://nas-dxp2800:43443
     s3Credentials:
       accessKeyId:
         name: postgres-s3-secrets

@@ -1,6 +1,6 @@
 nfs-subdir-external-provisioner:
   nfs:
-    server: 192.168.0.60
+    server: 192.168.178.2
     path: /volume1/k3s
   
   storageClass:

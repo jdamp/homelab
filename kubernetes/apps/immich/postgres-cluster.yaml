@@ -6,7 +6,8 @@ spec:
   instances: 1
 
   storage:
-    size: 1Gi
+    size: 5Gi
+    storageClass: local-path
 
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3
 
@@ -24,8 +25,14 @@ spec:
 
   resources:
     requests:
-      memory: "64Mi"
+      memory: "256Mi"
       cpu: "250m"
     limits:
       memory: "512Mi"
-      cpu: "500m"        
+      cpu: "500m"
+
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: nas-s3-store

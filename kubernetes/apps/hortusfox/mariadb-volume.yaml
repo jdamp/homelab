@@ -8,7 +8,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   iscsi:
-    targetPortal: 192.168.0.60:3260
+    targetPortal: 192.168.178.2:3260
     # Naming the target specifically after the app
     iqn: iqn.2025-03.com.ugreen:hortusfox-mariadb
     lun: 0
