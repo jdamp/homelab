@@ -1,0 +1,24 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-cluster
+spec:
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3
+  postgresql:
+    shared_preload_libraries:
+      - "vchord.so"
+  bootstrap:
+    initdb:
+      database: immich
+      owner: immich
+      postInitApplicationSQL:
+        - CREATE EXTENSION vchord CASCADE;
+        - CREATE EXTENSION earthdistance CASCADE;
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: nas-s3-store
+spec:
+  configuration:
+    destinationPath: s3://backups/immich/
