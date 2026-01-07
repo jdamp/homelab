@@ -21,7 +21,7 @@ victoria-metrics-k8s-stack:
       retentionPeriod: "30d"
       resources:
         limits:
-          memory: "512Mi"
+          memory: "1024Mi"
       storage:
         storageClassName: nfs-nas
         resources:
