@@ -23,10 +23,10 @@ victoria-metrics-k8s-stack:
         limits:
           memory: "1024Mi"
       storage:
-        storageClassName: nfs-nas
+        storageClassName: local-path
         resources:
           requests:
-            storage: "10Gi"
+            storage: "5Gi"
           
   # Optional: Disable HA/Replica settings for Alertmanager to save RAM
   alertmanager:
