@@ -2,26 +2,48 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: homepage
-  namespace: default
   labels:
     app.kubernetes.io/name: homepage
 data:
   kubernetes.yaml: |
     mode: cluster
-  settings.yaml: ""
-  #settings.yaml: |
-  #  providers:
-  #    longhorn:
-  #      url: https://longhorn.my.network
+  settings.yaml: |
+    title: MauzLab
+    background: 
+      image: https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=2560&q=80
+      blur: xl          
+      saturate: 50     
+      brightness: 25   
+      opacity: 40
+
+    layout:
+      Core:
+        header: true
+        style: row
+        columns: 2
+      Apps:
+        header: true
+        style: row
+        columns: 2
+
   custom.css: ""
   custom.js: ""
   bookmarks.yaml: |
     - Developer:
-        - Github:
-            - abbr: GH
-              href: https://github.com/
+        - Repo:
+            - icon: github.png
+              href: https://github.com/jdamp/homelab
   services.yaml: |
-    - Services:
+    - Core:
+        - ArgoCD:
+            href: https://argocd.mauzlab.de
+            icon: argo-cd.png
+            description: GitOps Deployments
+        - Grafana:
+            href: https://grafana.mauzlab.de
+            icon: grafana.png
+            description: Monitoring & Dashboards
+    - Apps:
         - Vaultwarden:
             href: https://passwort.mauzlab.de
             icon: vaultwarden.png
