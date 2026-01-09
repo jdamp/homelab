@@ -1,0 +1,17 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: homepage-ingress
+  namespace: default
+  labels:
+    app.kubernetes.io/name: homepage
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`home.mauzlab.de`)
+      services:
+        - name: homepage
+          port: 3000
+  tls: {}
