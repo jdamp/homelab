@@ -1,0 +1,15 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: paperless-ngx-ingress
+  namespace: paperless-ngx
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`akten.mauzlab.de`)
+      services:
+        - name: paperless-ngx-service
+          port: 8000
+  tls: {}

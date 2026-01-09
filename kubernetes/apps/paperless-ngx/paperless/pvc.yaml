@@ -1,0 +1,14 @@
+# Single PVC for all Paperless-ngx data (NFS storage)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paperless-pvc
+  labels:
+    app: paperless-ngx
+spec:
+  storageClassName: nfs-nas
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi

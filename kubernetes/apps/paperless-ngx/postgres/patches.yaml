@@ -1,0 +1,19 @@
+# Patches to customize the postgres-cluster base for paperless-ngx
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-cluster
+spec:
+  bootstrap:
+    initdb:
+      database: paperless
+      owner: paperless
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: nas-s3-store
+spec:
+  configuration:
+    destinationPath: s3://backups/paperless/

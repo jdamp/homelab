@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paperless-ngx
+  labels:
+    app: paperless-ngx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: paperless-ngx
+  template:
+    metadata:
+      labels:
+        app: paperless-ngx
+    spec:
+      containers:
+        - name: paperless-ngx
+          image: ghcr.io/paperless-ngx/paperless-ngx:latest
+          ports:
+            - containerPort: 8000
+              name: http
+          env:
+            # Redis connection
+            - name: PAPERLESS_REDIS
+              value: "redis://paperless-redis:6379"
+            # PostgreSQL connection from cloudnative-pg secret
+            - name: PAPERLESS_DBENGINE
+              value: "postgresql"
+            - name: PAPERLESS_DBHOST
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-cluster-app
+                  key: host
+            - name: PAPERLESS_DBPORT
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-cluster-app
+                  key: port
+            - name: PAPERLESS_DBUSER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-cluster-app
+                  key: username
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-cluster-app
+                  key: password
+            - name: PAPERLESS_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-cluster-app
+                  key: dbname
+            # Application settings
+            - name: PAPERLESS_URL
+              value: "https://akten.mauzlab.de"
+            - name: PAPERLESS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-secrets
+                  key: secret-key
+            - name: PAPERLESS_TIME_ZONE
+              value: "Europe/Berlin"
+            - name: PAPERLESS_OCR_LANGUAGE
+              value: "deu"
+            # User mapping
+            - name: USERMAP_UID
+              value: "1000"
+            - name: USERMAP_GID
+              value: "1000"
+          volumeMounts:
+            - name: paperless-storage
+              mountPath: /usr/src/paperless/data
+              subPath: data
+            - name: paperless-storage
+              mountPath: /usr/src/paperless/media
+              subPath: media
+            - name: paperless-storage
+              mountPath: /usr/src/paperless/consume
+              subPath: consume
+            - name: paperless-storage
+              mountPath: /usr/src/paperless/export
+              subPath: export
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+      volumes:
+        - name: paperless-storage
+          persistentVolumeClaim:
+            claimName: paperless-pvc
