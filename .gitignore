@@ -17,4 +17,4 @@ Chart.lock
 
 # Kubernetes
 *secrets*.yaml
-!*-sealed-secrets.yaml
+!*sealed-secrets.yaml
