@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: homepage
+  namespace: homepage
   labels:
     app.kubernetes.io/name: homepage
 data:
@@ -35,6 +36,14 @@ data:
               href: https://github.com/jdamp/homelab
   services.yaml: |
     - Core:
+        - NAS:
+            href: http://nas-dxp2800
+            icon: ugreen-nas.png
+            description: UGREEN NAS
+        - FritzBox:
+            href: https://fritz.box/
+            icon: fritzbox.png
+            description: Fritz!Box Webinterface
         - ArgoCD:
             href: https://argocd.mauzlab.de
             icon: argo-cd.png
