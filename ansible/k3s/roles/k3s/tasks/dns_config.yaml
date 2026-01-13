@@ -8,5 +8,5 @@
   ansible.builtin.copy:
     dest: /etc/rancher/k3s/resolv.conf
     content: |
-      nameserver {{ k3s_upstream_dns | default('192.168.178.1') }}
+      nameserver {{ k3s_upstream_dns | default('192.168.69.1') }}
     mode: '0644'
