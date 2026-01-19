@@ -32,6 +32,34 @@ spec:
                 secretKeyRef:
                   name: linkding-secrets
                   key: LD_SUPERUSER_PASSWORD
+            # PostgreSQL configuration
+            - name: LD_DB_ENGINE
+              value: postgres
+            - name: LD_DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-cluster-app
+                  key: dbname
+            - name: LD_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-cluster-app
+                  key: user
+            - name: LD_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-cluster-app
+                  key: password
+            - name: LD_DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-cluster-app
+                  key: host
+            - name: LD_DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-cluster-app
+                  key: port
           volumeMounts:
             - name: data
               mountPath: /etc/linkding/data
