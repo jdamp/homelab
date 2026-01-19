@@ -77,10 +77,10 @@ data:
             href: https://fotos.mauzlab.de
             icon: immich.png
             description: Photo Library
-        - Kavita:
-            href: https://bib.mauzlab.de
-            icon: kavita.png
-            description: Books & Papers
+        - Linkding:
+            href: https://links.mauzlab.de
+            icon: linkding.png
+            description: Links
   widgets.yaml: |
     - kubernetes:
         cluster:
