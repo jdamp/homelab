@@ -1,0 +1,15 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: linkding-ingress
+  namespace: linkding
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`links.mauzlab.de`)
+      services:
+        - name: linkding
+          port: 9090
+  tls: {}

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linkding
+  namespace: linkding
+  labels:
+    app: linkding
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linkding
+  template:
+    metadata:
+      labels:
+        app: linkding
+    spec:
+      containers:
+        - name: linkding
+          image: ghcr.io/sissbruecker/linkding:latest
+          ports:
+            - containerPort: 9090
+              name: http
+          volumeMounts:
+            - name: data
+              mountPath: /etc/linkding/data
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "50m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 9090
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 9090
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: linkding-data-pvc
