@@ -70,9 +70,10 @@ spec:
             - name: USERMAP_GID
               value: "1000"
           volumeMounts:
-            - name: paperless-storage
+            # Data on local-path for better performance
+            - name: paperless-data
               mountPath: /usr/src/paperless/data
-              subPath: data
+            # Media, consume, and export on NFS
             - name: paperless-storage
               mountPath: /usr/src/paperless/media
               subPath: media
@@ -99,6 +100,9 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
       volumes:
+        - name: paperless-data
+          persistentVolumeClaim:
+            claimName: paperless-data-pvc
         - name: paperless-storage
           persistentVolumeClaim:
             claimName: paperless-pvc

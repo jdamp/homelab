@@ -1,4 +1,4 @@
-# Single PVC for all Paperless-ngx data (NFS storage)
+# PVC for media, consume, and export directories (NFS storage)
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -12,3 +12,18 @@ spec:
   resources:
     requests:
       storage: 50Gi
+---
+# PVC for data directory (local-path storage for better performance)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paperless-data-pvc
+  labels:
+    app: paperless-ngx
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
