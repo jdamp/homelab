@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: linkding
 resources:
   - pvc.yaml
+  - sealed-secrets.yaml
   - deployment.yaml
   - service.yaml
   - ingress.yaml
