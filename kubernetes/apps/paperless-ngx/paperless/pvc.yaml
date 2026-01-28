@@ -13,7 +13,7 @@ spec:
     requests:
       storage: 50Gi
 ---
-# PVC for data directory (local-path storage for better performance)
+# PVC for data directory (local-path storage for less frequent NAS writes)
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
