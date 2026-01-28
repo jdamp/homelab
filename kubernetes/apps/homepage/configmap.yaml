@@ -37,7 +37,7 @@ data:
   services.yaml: |
     - Core:
         - NAS:
-            href: http://nas-dxp2800
+            href: http://dxp-2800
             icon: ugreen-nas.png
             description: UGREEN NAS
         - FritzBox:
