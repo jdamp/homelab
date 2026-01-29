@@ -10,6 +10,6 @@ spec:
     - kind: Rule
       match: Host(`todo.mauzlab.de`)
       services:
-        - name: vikunja-vikunja
+        - name: vikunja
           port: 3456
   tls: {}

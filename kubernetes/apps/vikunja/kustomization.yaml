@@ -17,3 +17,11 @@ resources:
 
 patches:
   - path: postgres-patches.yaml
+  # Fix ConfigMap name mismatch - chart hardcodes volume ref as vikunja-vikunja-config
+  - target:
+      kind: ConfigMap
+      name: vikunja-config
+    patch: |
+      - op: replace
+        path: /metadata/name
+        value: vikunja-vikunja-config
