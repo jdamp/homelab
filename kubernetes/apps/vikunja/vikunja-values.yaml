@@ -27,7 +27,7 @@ vikunja:
         config.yml: |
           service:
             publicurl: "https://todo.mauzlab.de"
-            enableregistration: false
+            enableregistration: true
 
   # Environment variables for database connection
   env:
