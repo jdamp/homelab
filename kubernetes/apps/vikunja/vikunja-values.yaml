@@ -1,0 +1,54 @@
+## Vikunja Helm Chart values
+## Relies on the common library chart from bjw-s
+## Ref: https://github.com/bjw-s-labs/helm-charts/tree/common-4.3.0/charts/library/common
+
+vikunja:
+  persistence:
+    # Data storage for file uploads
+    data:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 2Gi
+      mountPath: /app/vikunja/files
+    # Disable SQLite database persistence (using PostgreSQL)
+    database:
+      enabled: false
+
+  # Disable default ingress (using Traefik IngressRoute instead)
+  ingress:
+    main:
+      enabled: false
+
+  # Vikunja configuration
+  configMaps:
+    config:
+      enabled: true
+      data:
+        config.yml: |
+          service:
+            publicurl: "https://todo.mauzlab.de"
+            enableregistration: false
+
+  # Environment variables for database connection
+  env:
+    VIKUNJA_DATABASE_TYPE: "postgres"
+    VIKUNJA_DATABASE_HOST:
+      valueFrom:
+        secretKeyRef:
+          name: postgres-cluster-app
+          key: host
+    VIKUNJA_DATABASE_USER:
+      valueFrom:
+        secretKeyRef:
+          name: postgres-cluster-app
+          key: username
+    VIKUNJA_DATABASE_PASSWORD:
+      valueFrom:
+        secretKeyRef:
+          name: postgres-cluster-app
+          key: password
+    VIKUNJA_DATABASE_DATABASE:
+      valueFrom:
+        secretKeyRef:
+          name: postgres-cluster-app
+          key: dbname
