@@ -2,6 +2,9 @@
 ## Relies on the common library chart from bjw-s
 ## Ref: https://github.com/bjw-s-labs/helm-charts/tree/common-4.3.0/charts/library/common
 
+# Fix naming to ensure ConfigMap and Deployment volume references match
+fullnameOverride: vikunja-vikunja
+
 vikunja:
   persistence:
     # Data storage for file uploads

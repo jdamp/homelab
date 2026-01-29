@@ -10,7 +10,9 @@
     creates: "{{ k3s_binary_path }}"
   environment:
     INSTALL_K3S_EXEC: >-
-      {{ (k3s_disable_servicelb | bool) | ternary('--disable servicelb ', '') }}--cluster-init --resolv-conf /etc/rancher/k3s/resolv.conf
+      {{ (k3s_disable_servicelb | bool) | ternary('--disable servicelb ', '') }}
+      {{ (k3s_control_plane_taints | default([])) | map('regex_replace', '^(.*)$', '--node-taint \\1') | join(' ') }}
+      --cluster-init --resolv-conf /etc/rancher/k3s/resolv.conf
 
 - name: Wait for token
   ansible.builtin.wait_for:

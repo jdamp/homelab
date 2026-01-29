@@ -20,7 +20,9 @@
     K3S_URL: "https://{{ master_control_plane_ip }}:{{ k3s_api_port }}"
     K3S_TOKEN: "{{ k3s_token }}"
     INSTALL_K3S_EXEC: >-
-      server{{ (k3s_disable_servicelb | bool) | ternary(' --disable servicelb', '') }} --resolv-conf /etc/rancher/k3s/resolv.conf
+      server{{ (k3s_disable_servicelb | bool) | ternary(' --disable servicelb', '') }}
+      {{ (k3s_control_plane_taints | default([])) | map('regex_replace', '^(.*)$', '--node-taint \\1') | join(' ') }}
+      --resolv-conf /etc/rancher/k3s/resolv.conf
 
 - name: Wait for k3s API server to be ready
   ansible.builtin.wait_for:

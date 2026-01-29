@@ -44,7 +44,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: postgres-cluster-app
-                  key: user
+                  key: username
             - name: LD_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
