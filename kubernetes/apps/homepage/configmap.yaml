@@ -81,6 +81,10 @@ data:
             href: https://links.mauzlab.de
             icon: linkding.png
             description: Links
+        - Vikunja:
+            href: https://todo.mauzlab.de
+            icon: vikunja.png
+            description: To-Do Lists
   widgets.yaml: |
     - kubernetes:
         cluster:
