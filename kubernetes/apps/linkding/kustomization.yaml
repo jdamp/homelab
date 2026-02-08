@@ -5,7 +5,7 @@ namespace: linkding
 resources:
   - pvc.yaml
   - sealed-secrets.yaml
-  - postgres-cluster-app-sealed-secret.yaml
+  - postgres-sealed-secrets.yaml
   - deployment.yaml
   - service.yaml
   - ingress.yaml
