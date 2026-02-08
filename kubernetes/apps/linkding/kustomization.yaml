@@ -3,12 +3,9 @@ kind: Kustomization
 namespace: linkding
 
 resources:
-  - ../../base/postgres-cluster
   - pvc.yaml
   - sealed-secrets.yaml
+  - postgres-cluster-app-sealed-secret.yaml
   - deployment.yaml
   - service.yaml
   - ingress.yaml
-
-patches:
-  - path: postgres-patches.yaml
