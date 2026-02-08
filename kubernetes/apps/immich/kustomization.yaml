@@ -13,10 +13,9 @@ helmCharts:
 
 
 resources:
-  - ../../base/postgres-cluster
+  - postgres/cluster.yaml
+  - postgres/objectstore.yaml
+  - postgres/scheduled-backup.yaml
+  - postgres/s3-sealed-secrets.yaml
   - immich-volumes.yaml
-
-patches:
-  - path: postgres-patches.yaml
-
 

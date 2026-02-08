@@ -3,10 +3,17 @@ kind: Cluster
 metadata:
   name: postgres-cluster
 spec:
+  instances: 1
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3
+
   postgresql:
     shared_preload_libraries:
       - "vchord.so"
+
+  storage:
+    size: 2Gi
+    storageClass: local-path
+
   bootstrap:
     initdb:
       database: immich
@@ -14,11 +21,14 @@ spec:
       postInitApplicationSQL:
         - CREATE EXTENSION vchord CASCADE;
         - CREATE EXTENSION earthdistance CASCADE;
----
-apiVersion: barmancloud.cnpg.io/v1
-kind: ObjectStore
-metadata:
-  name: nas-s3-store
-spec:
-  configuration:
-    destinationPath: s3://backups/immich/
+
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: nas-s3-store
