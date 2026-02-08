@@ -1,0 +1,27 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-shared
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:18
+
+  storage:
+    size: 10Gi
+    storageClass: local-path
+
+  bootstrap:
+    initdb:
+      database: app
+      owner: app
+
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "500m"
+
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: nas-s3-store

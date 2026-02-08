@@ -1,0 +1,18 @@
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: nas-s3-store
+spec:
+  retentionPolicy: "30d"
+  configuration:
+    destinationPath: s3://backups/postgres-shared/
+    endpointURL: http://192.168.69.2:43443
+    s3Credentials:
+      accessKeyId:
+        name: postgres-s3-secrets
+        key: S3_ACCESS_KEY_ID
+      secretAccessKey:
+        name: postgres-s3-secrets
+        key: S3_ACCESS_SECRET_KEY
+    wal:
+      compression: gzip
