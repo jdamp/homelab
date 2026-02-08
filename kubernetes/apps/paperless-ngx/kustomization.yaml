@@ -4,7 +4,8 @@ kind: Kustomization
 namespace: paperless-ngx
 
 resources:
-  - ../../base/postgres-cluster
+  # Postgres secrets
+  - postgres/postgres-sealed-secrets.yaml
   # Redis
   - redis/deployment.yaml
   - redis/service.yaml
@@ -16,5 +17,3 @@ resources:
   - paperless/ingress.yaml
   - paperless/sealed-secrets.yaml
 
-patches:
-  - path: postgres/patches.yaml

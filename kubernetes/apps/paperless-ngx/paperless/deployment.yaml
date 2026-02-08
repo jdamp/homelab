@@ -30,27 +30,27 @@ spec:
             - name: PAPERLESS_DBHOST
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  name: postgres-secrets
                   key: host
             - name: PAPERLESS_DBPORT
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  name: postgres-secrets
                   key: port
             - name: PAPERLESS_DBUSER
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  name: postgres-secrets
                   key: username
             - name: PAPERLESS_DBPASS
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  name: postgres-secrets
                   key: password
             - name: PAPERLESS_DBNAME
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  name: postgres-secrets
                   key: dbname
             # Application settings
             - name: PAPERLESS_URL
