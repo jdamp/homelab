@@ -38,27 +38,27 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  name: postgres-secrets
                   key: username
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  name: postgres-secrets
                   key: password
             - name: POSTGRES_SERVER
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  name: postgres-secrets
                   key: host
             - name: POSTGRES_PORT
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  name: postgres-secrets
                   key: port
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  name: postgres-secrets
                   key: dbname
           resources:
             requests:
