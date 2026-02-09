@@ -35,20 +35,20 @@ vikunja:
     VIKUNJA_DATABASE_HOST:
       valueFrom:
         secretKeyRef:
-          name: postgres-cluster-app
+          name: postgres-secrets
           key: host
     VIKUNJA_DATABASE_USER:
       valueFrom:
         secretKeyRef:
-          name: postgres-cluster-app
+          name: postgres-secrets
           key: username
     VIKUNJA_DATABASE_PASSWORD:
       valueFrom:
         secretKeyRef:
-          name: postgres-cluster-app
+          name: postgres-secrets
           key: password
     VIKUNJA_DATABASE_DATABASE:
       valueFrom:
         secretKeyRef:
-          name: postgres-cluster-app
+          name: postgres-secrets
           key: dbname
