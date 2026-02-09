@@ -4,9 +4,9 @@ kind: Kustomization
 namespace: mealie
 
 resources:
-  - mealie-volume.yaml
+  - postgres/sealed-secrets.yaml
   - sealed-secrets.yaml
-  - postgres-sealed-secrets.yaml
-  - mealie-deployment.yaml
-  - mealie-service.yaml
-  - mealie-ingress.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+  - volume.yaml
