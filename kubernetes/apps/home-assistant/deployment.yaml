@@ -17,8 +17,6 @@ spec:
       containers:
         - name: home-assistant
           image: "ghcr.io/home-assistant/home-assistant:stable"
-          securityContext:
-            privileged: true
           ports:
             - containerPort: 8123
           volumeMounts:
@@ -27,13 +25,11 @@ spec:
             - mountPath: /etc/localtime
               name: home-assistant-time-volume
               readOnly: true
-      nodeSelector:
-        environment: zigbee
-      hostNetwork: true
       volumes:
         - name: home-assistant-config-volume
           persistentVolumeClaim:
             claimName: home-assistant-pvc
         - name: home-assistant-time-volume
-          persistentVolumeClaim:
-            claimName: home-assistant-time-pvc
+          hostPath:
+            path: /etc/localtime
+            type: File
