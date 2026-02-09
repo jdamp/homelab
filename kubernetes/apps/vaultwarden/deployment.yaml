@@ -22,8 +22,6 @@ spec:
         env:
         - name: DOMAIN
           value: "https://passwort.mauzlab.de"
-        - name: DATABASE_URL
-          value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)"
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
@@ -49,6 +47,8 @@ spec:
             secretKeyRef:
               name: postgres-secrets
               key: dbname
+        - name: DATABASE_URL
+          value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)"
         ports:
         - containerPort: 80
           name: http
