@@ -1,3 +1,4 @@
+# LoadBalancer service is required for some home assistant integrations
 apiVersion: v1
 kind: Service
 metadata:
@@ -12,3 +13,19 @@ spec:
   selector:
     app: home-assistant
   type: LoadBalancer
+---
+# ClusterIP service for ingress access
+apiVersion: v1
+kind: Service
+metadata:
+  name: home-assistant
+  labels:
+    app: home-assistant
+spec:
+  ports:
+    - port: 8123
+      targetPort: 8123
+      name: home-assistant-web
+  selector:
+    app: home-assistant
+  type: ClusterIP
