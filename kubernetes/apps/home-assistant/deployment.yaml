@@ -25,6 +25,9 @@ spec:
             - mountPath: /etc/localtime
               name: home-assistant-time-volume
               readOnly: true
+            - mountPath: /config/configuration.yaml
+              name: home-assistant-config-file
+              subPath: configuration.yaml
       volumes:
         - name: home-assistant-config-volume
           persistentVolumeClaim:
@@ -33,3 +36,6 @@ spec:
           hostPath:
             path: /etc/localtime
             type: File
+        - name: home-assistant-config-file
+          configMap:
+            name: home-assistant-config
