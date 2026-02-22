@@ -53,6 +53,14 @@ data:
             icon: grafana.png
             description: Monitoring & Dashboards
     - Apps:
+        - AdGuard:
+            href: https://adguard.mauzlab.de
+            icon: adguard-home.png
+            description: DNS Filtering
+        - Home Assistant:
+            href: https://assistant.mauzlab.de
+            icon: home-assistant.png
+            description: Home Automation
         - Vaultwarden:
             href: https://passwort.mauzlab.de
             icon: vaultwarden.png
