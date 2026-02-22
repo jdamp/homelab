@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: adguard-pvc
 spec:
-  storageClassName: local-path
+  storageClassName: nfs-nas
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 2Gi
