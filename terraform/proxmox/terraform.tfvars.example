@@ -6,7 +6,7 @@ proxmox_tls_insecure     = true
 
 # Cloud Image Settings
 cloud_image_url        = "https://cloud.debian.org/images/cloud/trixie/latest/debian-13-generic-amd64.qcow2"
-cloud_image_filename   = "jammy-server-cloudimg-amd64.qcow2"
+cloud_image_filename   = "debian-13-generic-amd64.qcow2"
 cloud_image_nodes      = ["pve"]
 
 
@@ -15,7 +15,7 @@ network_bridge = "vmbr0"
 gateway        = "192.168.1.1"
 
 # SSH Configuration
-ssh_user            = "ubuntu"
+ssh_user            = "debian"
 ssh_public_key_path = "~/.ssh/id_rsa.pub"
 
 # K3s Cluster Configuration

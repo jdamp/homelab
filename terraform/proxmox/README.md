@@ -4,7 +4,7 @@ This document outlines the required setup steps to configure Proxmox for Terrafo
 
 ## Proxmox User and Role Setup
 
-First create a dedicated Proxmox user and role for Terraform according to the [official provider documentation](https://registry.terraform.io/providers/Telmate/proxmox/latest/docs#creating-the-proxmox-user-and-role-for-terraform).
+First create a dedicated Proxmox user and role for Terraform according to the [official provider documentation](https://registry.terraform.io/providers/bpg/proxmox/latest/docs).
 
 ### 1. Create the Terraform Role
 

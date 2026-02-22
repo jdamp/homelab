@@ -14,9 +14,6 @@ spec:
   template:
     metadata:
       name: '{{.path.basename}}'
-      annotations:
-        # Lower sync wave to ensure core components are deployed first
-        argocd.argoproj.io/sync-wave: "0"
       labels:
         app.kubernetes.io/part-of: core
     spec:
@@ -31,9 +28,9 @@ spec:
         namespace: '{{.path.basename}}' 
  
       syncPolicy:
-        #automated:
-        #  prune: true
-        #  selfHeal: true
+        automated:
+          prune: true
+          selfHeal: true
         syncOptions:
           - CreateNamespace=true
           # Some apps include large resources include annotations that exceed the size limit for

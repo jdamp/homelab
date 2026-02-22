@@ -47,7 +47,6 @@ variable "network_bridge" {
 variable "gateway" {
   description = "Network gateway"
   type        = string
-  default     = "192.168.1.1"
 }
 
 # SSH Settings
