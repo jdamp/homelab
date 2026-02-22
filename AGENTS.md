@@ -79,3 +79,14 @@ To build the cluster from scratch, the following order of operations is required
 - **DO** read `README.md` in subdirectories for specific command syntax.
 - **DO NOT** hardcode IP addresses; refer to Terraform variables or Ansible inventory.
 - **DO NOT** commit `terraform.tfvars` or `kubeconfig` files.
+
+## 6. K3s-Specific Information
+
+### Namespace Management
+
+Namespaces are created **automatically** by Argo CD based on the directory name within `kubernetes/apps/` and `kubernetes/core/`.
+
+- Each subdirectory of `apps/` and `core/` maps directly to a Kubernetes namespace of the same name.
+- **Example:** `kubernetes/apps/adguard/` → namespace `adguard`; `kubernetes/core/metallb/` → namespace `metallb`.
+- You do **not** need to create a `Namespace` manifest manually — Argo CD handles this via the `CreateNamespace=true` sync option on the root `ApplicationSet`.
+- When adding a new application, simply create a new folder with the desired namespace name under `apps/` or `core/` and place the manifests inside it.
