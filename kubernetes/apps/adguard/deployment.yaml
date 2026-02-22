@@ -27,7 +27,7 @@ spec:
               containerPort: 53
               protocol: UDP
             - name: web
-              containerPort: 3000
+              containerPort: 80
               protocol: TCP
           env:
             - name: TZ

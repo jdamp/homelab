@@ -10,5 +10,5 @@ spec:
       match: Host(`adguard.mauzlab.de`)
       services:
         - name: adguard-web
-          port: 3000
+          port: 80
   tls: {}
