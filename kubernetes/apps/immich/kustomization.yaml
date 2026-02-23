@@ -17,5 +17,6 @@ resources:
   - postgres/objectstore.yaml
   - postgres/scheduled-backup.yaml
   - postgres/s3-sealed-secrets.yaml
+  - postgres/app-sealed-secrets.yaml
   - immich-volumes.yaml
 

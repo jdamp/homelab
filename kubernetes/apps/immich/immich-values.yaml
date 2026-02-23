@@ -38,22 +38,24 @@ server:
             DB_HOSTNAME:
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  # Use a dedicated Immich app secret; CNPG's generated *-app secret can drift
+                  # if the cluster bootstrap owner/database changes.
+                  name: immich-db
                   key: host
             DB_USERNAME:
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  name: immich-db
                   key: username
             DB_PASSWORD:
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  name: immich-db
                   key: password
             DB_DATABASE_NAME:
               valueFrom:
                 secretKeyRef:
-                  name: postgres-cluster-app
+                  name: immich-db
                   key: dbname
   ingress:
     main:
