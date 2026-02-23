@@ -7,7 +7,7 @@ namespace: vikunja
 helmCharts:
   - name: vikunja
     repo: oci://ghcr.io/go-vikunja/helm-chart
-    version: 2.0.0
+    version: 2.0.2
     releaseName: vikunja
     valuesFile: vikunja-values.yaml
 

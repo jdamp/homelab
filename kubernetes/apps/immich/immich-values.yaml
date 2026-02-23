@@ -2,6 +2,13 @@
 ## You can find it at https://github.com/bjw-s-labs/helm-charts/tree/common-4.3.0/charts/library/common
 ## Refer there for more detail about the supported values
 
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          # Immich app version is pinned here because the Helm chart version can lag behind app releases.
+          tag: v2.5.6
 
 immich:
   metrics:
