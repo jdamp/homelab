@@ -38,8 +38,6 @@ server:
             DB_HOSTNAME:
               valueFrom:
                 secretKeyRef:
-                  # Use a dedicated Immich app secret; CNPG's generated *-app secret can drift
-                  # if the cluster bootstrap owner/database changes.
                   name: immich-db
                   key: host
             DB_USERNAME:
