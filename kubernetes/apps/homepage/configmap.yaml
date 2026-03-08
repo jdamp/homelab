@@ -89,10 +89,10 @@ data:
             href: https://links.mauzlab.de
             icon: linkding.png
             description: Links
-        - Vikunja:
+        - Planka:
             href: https://todo.mauzlab.de
-            icon: vikunja.png
-            description: To-Do Lists
+            icon: planka.png
+            description: Project Management
   widgets.yaml: |
     - kubernetes:
         cluster:
