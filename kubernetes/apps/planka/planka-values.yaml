@@ -1,0 +1,38 @@
+## Planka Helm Chart values
+## Ref: https://github.com/plankanban/planka/tree/master/charts/planka
+
+# Application base URL (must match the ingress host)
+baseUrl: "https://todo.mauzlab.de"
+
+# Secret key for session encryption
+# Managed via existingSecretkeySecret instead of inline
+existingSecretkeySecret: "planka-secrets"
+
+# Initial admin user (can be removed after first login)
+admin_email: "admin@mauzlab.de"
+admin_name: "Admin"
+admin_username: "admin"
+# Password managed via existingAdminCredsSecret
+existingAdminCredsSecret: "planka-secrets"
+
+# Disable built-in PostgreSQL — using external postgres-shared cluster
+postgresql:
+  enabled: false
+
+# Database connection via existing secret containing DATABASE_URL
+existingDburlSecret: "planka-secrets"
+
+# Persistent storage for user avatars and card attachments
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  size: 2Gi
+
+# Disable default ingress (using Traefik IngressRoute instead)
+ingress:
+  enabled: false
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 1337
