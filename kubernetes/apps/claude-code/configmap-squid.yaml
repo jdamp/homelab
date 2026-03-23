@@ -18,6 +18,10 @@ data:
 
     http_port 3128
 
+    # Don't drop to the proxy user — the container provides isolation
+    cache_effective_user root
+    cache_effective_group root
+
     access_log stdio:/dev/stdout
     cache_log stdio:/dev/stderr
 
