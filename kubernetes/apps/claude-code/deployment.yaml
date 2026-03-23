@@ -25,6 +25,7 @@ spec:
       containers:
         - name: claude-code
           image: ghcr.io/jdamp/claude-code:2.1.81
+          args: ["claude", "--remote-control"]
           stdin: true
           tty: true
           env:
