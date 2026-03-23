@@ -6,7 +6,6 @@ namespace: claude-code
 resources:
   - serviceaccount.yaml
   - sealed-secrets.yaml
-  - configmap-squid.yaml
   - pvc-config.yaml
   - pvc-workspace.yaml
   - deployment.yaml

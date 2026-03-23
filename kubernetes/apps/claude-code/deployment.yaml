@@ -30,12 +30,6 @@ spec:
           env:
             - name: CLAUDE_CONFIG_DIR
               value: /claude
-            - name: HTTP_PROXY
-              value: http://localhost:3128
-            - name: HTTPS_PROXY
-              value: http://localhost:3128
-            - name: NO_PROXY
-              value: localhost,127.0.0.1
             - name: USER_UID
               value: "1000"
             - name: USER_GID
@@ -78,40 +72,6 @@ spec:
             periodSeconds: 60
             failureThreshold: 3
 
-        - name: squid
-          image: ubuntu/squid:6.10-24.10_beta
-          volumeMounts:
-            - name: squid-config
-              mountPath: /etc/squid/squid.conf
-              subPath: squid.conf
-            - name: squid-config
-              mountPath: /etc/squid/blocked-domains.txt
-              subPath: blocked-domains.txt
-          ports:
-            - containerPort: 3128
-              protocol: TCP
-          resources:
-            requests:
-              cpu: 50m
-              memory: 64Mi
-            limits:
-              cpu: 200m
-              memory: 256Mi
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-              add:
-                - SETUID
-                - SETGID
-                - DAC_OVERRIDE
-          livenessProbe:
-            tcpSocket:
-              port: 3128
-            initialDelaySeconds: 10
-            periodSeconds: 30
-
       volumes:
         - name: claude-config
           persistentVolumeClaim:
@@ -119,9 +79,6 @@ spec:
         - name: claude-workspace
           persistentVolumeClaim:
             claimName: claude-workspace-pvc
-        - name: squid-config
-          configMap:
-            name: squid-config
         - name: ssh-authorized-keys
           secret:
             secretName: ssh-authorized-keys
