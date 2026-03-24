@@ -25,10 +25,13 @@ spec:
       containers:
         - name: claude-code
           image: ghcr.io/jdamp/claude-code:2.1.81
+          imagePullPolicy: Always
           args: ["claude", "--remote-control"]
           stdin: true
           tty: true
           env:
+            - name: HOME
+              value: /home/claude
             - name: CLAUDE_CONFIG_DIR
               value: /claude
             - name: USER_UID
