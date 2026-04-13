@@ -1,0 +1,66 @@
+- Core:
+    - NAS:
+        href: http://dxp-2800
+        icon: ugreen-nas.png
+        description: UGREEN NAS
+    - FritzBox:
+        href: https://fritz.box/
+        icon: fritzbox.png
+        description: Fritz!Box Webinterface
+    - ArgoCD:
+        href: https://argocd.mauzlab.de
+        icon: argo-cd.png
+        description: GitOps Deployments
+    - Grafana:
+        href: https://grafana.mauzlab.de
+        icon: grafana.png
+        description: Monitoring & Dashboards
+    - pgAdmin:
+        href: https://pgadmin.mauzlab.de
+        icon: pgadmin.png
+        description: Database Management
+- Apps:
+    - AdGuard:
+        href: https://adguard.mauzlab.de
+        icon: adguard-home.png
+        description: DNS Filtering
+    - Home Assistant:
+        href: https://assistant.mauzlab.de
+        icon: home-assistant.png
+        description: Home Automation
+    - Vaultwarden:
+        href: https://passwort.mauzlab.de
+        icon: vaultwarden.png
+        description: Password Manager
+    - Paperless-ngx:
+        href: https://akten.mauzlab.de
+        icon: paperless-ngx.png
+        description: Document Management
+    - Mealie:
+        href: https://futter.mauzlab.de
+        icon: mealie.png
+        description: Recipe Manager
+    - HortusFox:
+        href: https://kratzbaum.mauzlab.de
+        icon: hortusfox.png
+        description: Plant Management
+    - Jellyfin:
+        href: https://kino.mauzlab.de
+        icon: jellyfin.png
+        description: Media Server
+    - Immich:
+        href: https://fotos.mauzlab.de
+        icon: immich.png
+        description: Photo Library
+    - Linkding:
+        href: https://links.mauzlab.de
+        icon: linkding.png
+        description: Links
+    - Planka:
+        href: https://todo.mauzlab.de
+        icon: planka.png
+        description: Project Management
+    - MLflow:
+        href: https://mlflow.mauzlab.de
+        icon: https://raw.githubusercontent.com/mlflow/mlflow/master/assets/logo.svg
+        description: ML Experiment Tracking
