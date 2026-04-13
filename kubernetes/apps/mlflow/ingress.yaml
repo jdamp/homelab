@@ -1,0 +1,15 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: mlflow-ingress
+  namespace: mlflow
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`mlflow.mauzlab.de`)
+      services:
+        - name: mlflow
+          port: 5000
+  tls: {}

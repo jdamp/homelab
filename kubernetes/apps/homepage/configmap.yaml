@@ -97,6 +97,10 @@ data:
             href: https://todo.mauzlab.de
             icon: planka.png
             description: Project Management
+        - MLflow:
+            href: https://mlflow.mauzlab.de
+            icon: mlflow.png
+            description: ML Experiment Tracking
   widgets.yaml: |
     - kubernetes:
         cluster:
