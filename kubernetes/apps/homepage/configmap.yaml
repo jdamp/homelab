@@ -52,6 +52,10 @@ data:
             href: https://grafana.mauzlab.de
             icon: grafana.png
             description: Monitoring & Dashboards
+        - pgAdmin:
+            href: https://pgadmin.mauzlab.de
+            icon: pgadmin.png
+            description: Database Management
     - Apps:
         - AdGuard:
             href: https://adguard.mauzlab.de
