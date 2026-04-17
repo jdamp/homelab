@@ -8,6 +8,7 @@ resources:
   - sealed-secrets.yaml
   - pvc-config.yaml
   - pvc-workspace.yaml
+  - pvc-home.yaml
   - deployment.yaml
   - service-ssh.yaml
   - networkpolicy.yaml

@@ -31,7 +31,7 @@ spec:
           tty: true
           env:
             - name: HOME
-              value: /claude
+              value: /home/claude
             - name: CLAUDE_CONFIG_DIR
               value: /claude
             - name: USER_UID
@@ -47,6 +47,8 @@ spec:
             - containerPort: 22
               protocol: TCP
           volumeMounts:
+            - name: claude-home
+              mountPath: /home/claude
             - name: claude-config
               mountPath: /claude
             - name: claude-workspace
@@ -75,6 +77,9 @@ spec:
             failureThreshold: 3
 
       volumes:
+        - name: claude-home
+          persistentVolumeClaim:
+            claimName: claude-home-pvc
         - name: claude-config
           persistentVolumeClaim:
             claimName: claude-config-pvc
