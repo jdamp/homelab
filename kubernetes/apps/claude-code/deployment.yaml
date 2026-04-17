@@ -24,7 +24,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: claude-code
-          image: ghcr.io/jdamp/claude-code:2.1.110
+          image: ghcr.io/jdamp/claude-code:2.1.112
           imagePullPolicy: Always
           args: ["claude", "--remote-control"]
           stdin: true
