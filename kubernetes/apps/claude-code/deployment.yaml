@@ -31,7 +31,7 @@ spec:
           tty: true
           env:
             - name: HOME
-              value: /home/claude
+              value: /claude
             - name: CLAUDE_CONFIG_DIR
               value: /claude
             - name: USER_UID
