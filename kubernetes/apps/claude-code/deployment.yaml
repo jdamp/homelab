@@ -26,7 +26,7 @@ spec:
         - name: claude-code
           image: ghcr.io/jdamp/claude-code:2.1.112
           imagePullPolicy: Always
-          args: ["claude", "--remote-control"]
+          args: ["claude", "--channels", "plugin:telegram@claude-plugins-official"]
           stdin: true
           tty: true
           env:
@@ -38,6 +38,11 @@ spec:
               value: "1000"
             - name: USER_GID
               value: "1000"
+            - name: TELEGRAM_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: telegram-bot-token
+                  key: TELEGRAM_BOT_TOKEN
           ports:
             - containerPort: 22
               protocol: TCP
