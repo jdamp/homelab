@@ -11,4 +11,3 @@ resources:
   - pvc-home.yaml
   - deployment.yaml
   - service-ssh.yaml
-  - networkpolicy.yaml
