@@ -24,7 +24,11 @@ spec:
           type: RuntimeDefault
       containers:
         - name: claude-code
+<<<<<<< HEAD
           image: ghcr.io/jdamp/claude-code:2.1.119
+=======
+          image: ghcr.io/jdamp/claude-code:2.1.116
+>>>>>>> 30d8d86 (chore(claude-code): bump image to 2.1.116)
           imagePullPolicy: Always
           args: ["claude", "--channels", "plugin:telegram@claude-plugins-official"]
           stdin: true
