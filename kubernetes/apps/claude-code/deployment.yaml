@@ -24,7 +24,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: claude-code
-          image: ghcr.io/jdamp/claude-code:2.1.112
+          image: ghcr.io/jdamp/claude-code:2.1.119
           imagePullPolicy: Always
           args: ["claude", "--channels", "plugin:telegram@claude-plugins-official"]
           stdin: true
