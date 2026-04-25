@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pi-bot
+  labels:
+    app: pi-bot
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: pi-bot
+  template:
+    metadata:
+      labels:
+        app: pi-bot
+    spec:
+      automountServiceAccountToken: false
+      serviceAccountName: pi-bot
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: pi-bot
+          image: ghcr.io/jdamp/pi-coding-agent:0.70.2
+          imagePullPolicy: Always
+          command: ["pi"]
+          stdin: true
+          tty: true
+          env:
+            - name: HOME
+              value: /home/pi
+            - name: USER_UID
+              value: "1000"
+            - name: USER_GID
+              value: "1000"
+            - name: TELEGRAM_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: telegram-bot-token
+                  key: TELEGRAM_BOT_TOKEN
+          volumeMounts:
+            - name: pi-home
+              mountPath: /home/pi
+            - name: pi-workspace
+              mountPath: /workspace
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+      volumes:
+        - name: pi-home
+          persistentVolumeClaim:
+            claimName: pi-home-pvc
+        - name: pi-workspace
+          persistentVolumeClaim:
+            claimName: pi-workspace-pvc

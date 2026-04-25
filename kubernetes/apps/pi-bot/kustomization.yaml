@@ -1,13 +1,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: claude-code
+namespace: pi-bot
 
 resources:
   - serviceaccount.yaml
   - sealed-secrets.yaml
-  - pvc-config.yaml
-  - pvc-workspace.yaml
   - pvc-home.yaml
+  - pvc-workspace.yaml
   - deployment.yaml
-  - service-ssh.yaml
