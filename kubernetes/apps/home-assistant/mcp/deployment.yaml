@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: home-assistant-mcp
-          image: ghcr.io/homeassistant-ai/home-assistant-mcp:7.3.0
+          image: ghcr.io/homeassistant-ai/ha-mcp:7.3.0
           env:
             - name: HOMEASSISTANT_URL
               value: "http://home-assistant.home-assistant.svc.cluster.local:8123"
