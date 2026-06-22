@@ -38,6 +38,9 @@ jellyfin:
       size: 10Gi
       storageClass: local-path
 
+  image:
+    tag: "10.11.11"
+
   resources:
     requests:
       cpu: 500m
