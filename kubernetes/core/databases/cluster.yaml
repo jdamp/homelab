@@ -20,6 +20,16 @@ spec:
       memory: "512Mi"
       cpu: "500m"
 
+  managed:
+    roles:
+      - name: pgadmin_admin
+        ensure: present
+        login: true
+        createrole: true
+        createdb: true
+        passwordSecret:
+          name: pgadmin-admin-db-secret
+
   plugins:
     - name: barman-cloud.cloudnative-pg.io
       isWALArchiver: true

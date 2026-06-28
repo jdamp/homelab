@@ -8,3 +8,4 @@ resources:
   - objectstore.yaml
   - scheduled-backup.yaml
   - s3-sealed-secrets.yaml
+  - pgadmin-sealed-secrets.yaml
