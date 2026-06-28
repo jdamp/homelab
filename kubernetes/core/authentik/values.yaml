@@ -1,0 +1,19 @@
+authentik:
+  existingSecret:
+    secretName: authentik-config
+
+# disable builtin postgres
+postgresql:
+  enabled: false
+
+server:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+
+worker:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
