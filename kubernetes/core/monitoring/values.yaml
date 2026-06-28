@@ -1,7 +1,23 @@
 victoria-metrics-k8s-stack:
-  
   grafana:
     enabled: true
+    envFromSecret: grafana-oauth-secret
+    grafana.ini:
+      server:
+        root_url: https://grafana.mauzlab.de
+      auth:
+        disable_login_form: false
+      auth.generic_oauth:
+        enabled: true
+        name: Authentik
+        allow_sign_up: true
+        client_id: $__env{GF_AUTH_GENERIC_OAUTH_CLIENT_ID}
+        client_secret: $__env{GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET}
+        scopes: openid email profile
+        auth_url: https://auth.mauzlab.de/application/o/authorize/
+        token_url: https://auth.mauzlab.de/application/o/token/
+        api_url: https://auth.mauzlab.de/application/o/userinfo/
+        role_attribute_path: contains(groups[*], 'homelab-admins') && 'Admin' || 'Viewer'
     ingress:
       enabled: true
       ingressClassName: traefik
@@ -27,7 +43,7 @@ victoria-metrics-k8s-stack:
         resources:
           requests:
             storage: "5Gi"
-          
+
   # Optional: Disable HA/Replica settings for Alertmanager to save RAM
   alertmanager:
     enabled: true
