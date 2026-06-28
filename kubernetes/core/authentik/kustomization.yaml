@@ -11,5 +11,5 @@ helmCharts:
     valuesFile: values.yaml
 
 resources:
-  - sealed-secret.yaml
+  - sealed-secrets.yaml
   - route.yaml
