@@ -1,6 +1,6 @@
 - Core:
     - NAS:
-        href: http://dxp-2800
+        href: http://DXP2800
         icon: ugreen-nas.png
         description: UGREEN NAS
     - FritzBox:
