@@ -35,6 +35,25 @@ spec:
               value: "https://futter.mauzlab.de"
             - name: DB_ENGINE
               value: "postgres"
+            - name: OIDC_AUTH_ENABLED
+              value: "true"
+            - name: OIDC_PROVIDER_NAME
+              value: "authentik"
+            - name: OIDC_CONFIGURATION_URL
+              value: "https://auth.mauzlab.de/application/o/mealie/.well-known/openid-configuration"
+            - name: OIDC_CLIENT_ID
+              value: "mealie"
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: mealie-secrets
+                  key: OIDC_CLIENT_SECRET
+            - name: OIDC_SIGNUP_ENABLED
+              value: "true"
+            - name: OIDC_USER_GROUP
+              value: "homelab-users"
+            - name: OIDC_ADMIN_GROUP
+              value: "homelab-admins"
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
