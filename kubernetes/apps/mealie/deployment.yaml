@@ -33,6 +33,8 @@ spec:
               value: "warning"
             - name: BASE_URL
               value: "https://futter.mauzlab.de"
+            - name: FORWARDED_ALLOW_IPS
+              value: "*"
             - name: DB_ENGINE
               value: "postgres"
             - name: OIDC_AUTH_ENABLED
