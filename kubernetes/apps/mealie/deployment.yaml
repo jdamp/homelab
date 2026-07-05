@@ -50,6 +50,8 @@ spec:
                 secretKeyRef:
                   name: mealie-secrets
                   key: OIDC_CLIENT_SECRET
+            - name: OIDC_SIGNING_ALGORITHM
+              value: "RS256"
             - name: OIDC_SIGNUP_ENABLED
               value: "true"
             - name: OIDC_USER_GROUP
