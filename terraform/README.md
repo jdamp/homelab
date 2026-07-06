@@ -6,3 +6,5 @@ This folder contains Terraform configurations for this homelab.
 
 - `proxmox/`: infrastructure provisioning on Proxmox (VMs, inventory output, and related configuration).
   - See `proxmox/README.md` for usage.
+- `authentik/`: Authentik application/provider configuration for OAuth clients.
+  - See `authentik/README.md` for usage.

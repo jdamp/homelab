@@ -1,0 +1,10 @@
+authentik_url   = "https://auth.mauzlab.de"
+authentik_token = "your-authentik-api-token"
+
+# Optional: set this when importing an existing Grafana OAuth provider.
+# Leave unset to let Authentik generate its secret.
+# grafana_oauth_client_secret = "existing-grafana-client-secret"
+
+# Optional: set this when importing an existing Paperless-ngx OAuth provider.
+# Leave unset to let Authentik generate its secret.
+# paperless_oauth_client_secret = "existing-paperless-client-secret"

@@ -12,6 +12,7 @@ Using Proxmox VE, multiple VMs are provisioned on these nodes to run a K3s Kuber
 ### Terraform
 - `terraform/proxmox/` — Terraform configuration for provisioning VMs on Proxmox hosts using the `bpg/proxmox` provider.
   - See `proxmox/README.md` for usage.
+- `terraform/authentik/` — Terraform configuration for Authentik OAuth applications/providers.
 
 ### Ansible
 - `ansible/k3s/` — Ansible playbooks and roles for installing and managing K3s clusters on the VMs.
