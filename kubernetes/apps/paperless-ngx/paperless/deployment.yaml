@@ -64,6 +64,20 @@ spec:
               value: "Europe/Berlin"
             - name: PAPERLESS_OCR_LANGUAGE
               value: "deu"
+            # Authentik OIDC via django-allauth
+            - name: PAPERLESS_APPS
+              value: "allauth.socialaccount.providers.openid_connect"
+            - name: PAPERLESS_SOCIAL_AUTO_SIGNUP
+              value: "true"
+            - name: PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS
+              value: "true"
+            - name: PAPERLESS_ACCOUNT_EMAIL_VERIFICATION
+              value: "none"
+            - name: PAPERLESS_SOCIALACCOUNT_PROVIDERS
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-secrets
+                  key: socialaccount-providers
             # User mapping
             - name: USERMAP_UID
               value: "1000"
