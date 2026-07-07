@@ -7,7 +7,7 @@ namespace: immich
 helmCharts:
   - name: immich
     repo: https://immich-app.github.io/immich-charts
-    version: 0.10.3
+    version: 0.13.1
     releaseName: immich
     valuesFile: immich-values.yaml
 
@@ -19,4 +19,3 @@ resources:
   - postgres/s3-sealed-secrets.yaml
   - postgres/app-sealed-secrets.yaml
   - immich-volumes.yaml
-

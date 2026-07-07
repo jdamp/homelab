@@ -6,6 +6,7 @@ Managed by default:
 
 - Grafana: OAuth2 provider and application matching `kubernetes/core/monitoring/values.yaml`.
 - Paperless-ngx: OIDC provider and application for `https://akten.mauzlab.de`.
+- Immich: OIDC provider and application for `https://fotos.mauzlab.de`.
 
 ## Usage
 
@@ -35,6 +36,28 @@ Paperless-ngx expects the Authentik provider to allow `https://akten.mauzlab.de/
 - `PAPERLESS_SOCIALACCOUNT_PROVIDERS`: JSON for an `openid_connect` app with `provider_id` set to `authentik`, `client_id` from `terraform output -raw paperless_oauth_client_id`, `secret` from `terraform output -raw paperless_oauth_client_secret`, and `settings.server_url` from `terraform output -raw paperless_oidc_server_url`.
 
 To keep access to data owned by the current local Paperless user, make the Authentik user match the existing Paperless account before the first OIDC login. The low-risk path is to set the Authentik email to the same email as the local Paperless user, keep regular login enabled, sign in locally, and connect the Authentik social account from Paperless account settings if the UI offers it. If Paperless creates a second user instead, stop Paperless and either attach the new `socialaccount_socialaccount.user_id` row to the old `auth_user.id` or move document ownership from the old user to the new one in the database, then start Paperless again. Take a database backup first.
+
+Immich expects the Authentik provider to allow:
+
+- `https://fotos.mauzlab.de/auth/login`
+- `https://fotos.mauzlab.de/user-settings`
+- `app.immich:///oauth-callback`
+
+After apply, configure Immich OAuth through the Secret-backed config flow in
+`kubernetes/apps/immich/README.md` using:
+
+- Issuer URL: `terraform output -raw immich_oidc_discovery_url`
+- Client ID: `terraform output -raw immich_oauth_client_id`
+- Client secret: `terraform output -raw immich_oauth_client_secret`
+- Scope: `openid email profile`
+- Signing algorithm: `RS256`
+- Token endpoint auth method: `client_secret_post`
+- Button text: `Sign in with Authentik`
+
+The Immich chart is configured with `configurationKind: Secret`, but the OAuth
+client secret should still stay out of `immich-values.yaml`; values committed to
+Git are plaintext Helm inputs. Use a SealedSecret-backed `existingConfiguration`
+instead.
 
 ## Adding OAuth Apps
 
