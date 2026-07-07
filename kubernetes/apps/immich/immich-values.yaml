@@ -80,4 +80,5 @@ machine-learning:
   persistence:
     cache:
       enabled: true
+      type: persistentVolumeClaim
       existingClaim: immich-machine-learning
