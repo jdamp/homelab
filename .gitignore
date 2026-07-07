@@ -16,5 +16,5 @@ Chart.lock
 **/charts/*.tgz
 
 # Kubernetes
-*secrets*.yaml
+*secret*.yaml
 !*sealed-secrets.yaml

@@ -11,7 +11,6 @@ helmCharts:
     releaseName: immich
     valuesFile: immich-values.yaml
 
-
 resources:
   - postgres/cluster.yaml
   - postgres/objectstore.yaml
@@ -19,3 +18,4 @@ resources:
   - postgres/s3-sealed-secrets.yaml
   - postgres/app-sealed-secrets.yaml
   - immich-volumes.yaml
+  - sealed-secrets.yaml

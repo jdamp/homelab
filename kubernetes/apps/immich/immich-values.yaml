@@ -21,7 +21,7 @@ immich:
   # ref: https://immich.app/docs/install/config-file/
   # Keep OAuth client secrets out of Git. Use an existing SealedSecret-backed Secret instead.
   configurationKind: Secret
-  # existingConfiguration: immich-config
+  existingConfiguration: immich-config
   configuration: {}
 
 # Dependencies
@@ -73,7 +73,7 @@ server:
             - path: "/"
               service:
                 identifier: main
-      tls: []  # Uses Traefik's default
+      tls: [] # Uses Traefik's default
 
 machine-learning:
   enabled: true
