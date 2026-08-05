@@ -13,3 +13,11 @@ data "authentik_flow" "authorization" {
 data "authentik_flow" "invalidation" {
   slug = var.invalidation_flow_slug
 }
+
+data "authentik_group" "homelab_users" {
+  name = "homelab-users"
+}
+
+data "authentik_group" "homelab_admins" {
+  name = "homelab-admins"
+}

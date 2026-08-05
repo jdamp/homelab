@@ -13,4 +13,5 @@ helmCharts:
 
 resources:
   - postgres/sealed-secrets.yaml
+  - oidc-sealed-secrets.yaml
   - ingress.yaml

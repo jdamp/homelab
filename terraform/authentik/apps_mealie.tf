@@ -4,14 +4,6 @@ variable "mealie_hostname" {
   default     = "futter.mauzlab.de"
 }
 
-data "authentik_group" "homelab_users" {
-  name = "homelab-users"
-}
-
-data "authentik_group" "homelab_admins" {
-  name = "homelab-admins"
-}
-
 data "authentik_property_mapping_provider_scope" "mealie_default" {
   managed_list = local.default_oauth_scope_mappings
 }

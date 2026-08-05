@@ -36,3 +36,17 @@ ingress:
 service:
   type: ClusterIP
   port: 1337
+
+# OpenID Connect via Authentik
+oidc:
+  enabled: true
+  existingSecret: "planka-oidc-secret"
+  issuerUrl: "https://auth.mauzlab.de/application/o/planka/"
+  scopes:
+    - openid
+    - profile
+    - email
+  admin:
+    rolesAttribute: groups
+    roles:
+      - homelab-admins

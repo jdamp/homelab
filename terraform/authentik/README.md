@@ -7,6 +7,7 @@ Managed by default:
 - Grafana: OAuth2 provider and application matching `kubernetes/core/monitoring/values.yaml`.
 - Paperless-ngx: OIDC provider and application for `https://akten.mauzlab.de`.
 - Immich: OIDC provider and application for `https://fotos.mauzlab.de`.
+- Planka: OIDC provider and application for `https://todo.mauzlab.de`.
 
 ## Usage
 
@@ -58,6 +59,38 @@ The Immich chart is configured with `configurationKind: Secret`, but the OAuth
 client secret should still stay out of `immich-values.yaml`; values committed to
 Git are plaintext Helm inputs. Use a SealedSecret-backed `existingConfiguration`
 instead.
+
+Planka expects the Authentik provider to allow `https://todo.mauzlab.de/oidc-callback`.
+The Helm values in `kubernetes/apps/planka/planka-values.yaml` stage:
+
+- Issuer URL: `terraform output -raw planka_oidc_issuer_url`
+- Client ID: `terraform output -raw planka_oauth_client_id`
+- Client secret: `terraform output -raw planka_oauth_client_secret`
+- Scope: `openid profile email`
+- Admin role: `homelab-admins`
+
+The Planka chart reads OIDC credentials from a Secret named `planka-oidc-secret`
+with keys `clientId` and `clientSecret`. Keep OIDC disabled until the sealed
+secret exists. If you set `planka_oauth_client_secret` in local
+`terraform.tfvars`, seal that same value:
+
+```bash
+cd terraform/authentik
+terraform apply
+
+cd ../..
+kubectl create secret generic planka-oidc-secret \
+  --namespace planka \
+  --from-literal=clientId="$(terraform -chdir=terraform/authentik output -raw planka_oauth_client_id)" \
+  --from-literal=clientSecret="$(terraform -chdir=terraform/authentik output -raw planka_oauth_client_secret)" \
+  --dry-run=client \
+  -o yaml \
+  | kubeseal --controller-namespace sealed-secrets --format yaml \
+  > kubernetes/apps/planka/oidc-sealed-secrets.yaml
+```
+
+Then set `oidc.enabled: true` in `kubernetes/apps/planka/planka-values.yaml`
+and add `oidc-sealed-secrets.yaml` to `kubernetes/apps/planka/kustomization.yaml`.
 
 ## Adding OAuth Apps
 
