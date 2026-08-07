@@ -7,6 +7,7 @@ Managed by default:
 - Grafana: OAuth2 provider and application matching `kubernetes/core/monitoring/values.yaml`.
 - Paperless-ngx: OIDC provider and application for `https://akten.mauzlab.de`.
 - Immich: OIDC provider and application for `https://fotos.mauzlab.de`.
+- Argo CD: OIDC provider and application for `https://argocd.mauzlab.de`.
 - Planka: OIDC provider and application for `https://todo.mauzlab.de`.
 
 ## Usage
