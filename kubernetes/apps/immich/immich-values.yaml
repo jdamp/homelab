@@ -1,5 +1,5 @@
 ## This chart relies on the common library chart from bjw-s
-## You can find it at https://github.com/bjw-s-labs/helm-charts/tree/main/charts/library/common
+## You can find it at https://github.com/bjw-s-labs/helm-charts/tree/common-5.0.1/charts/library/common
 ## Refer there for more detail about the supported values
 
 controllers:
@@ -28,6 +28,17 @@ immich:
 
 valkey:
   enabled: true
+  controllers:
+    main:
+      containers:
+        main:
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
 
 # Immich components
 
@@ -37,6 +48,15 @@ server:
     main:
       containers:
         main:
+          # Bulk imports fan out thumbnail and transcoding jobs. Keep those jobs inside
+          # a cgroup boundary so they cannot exhaust memory on the Kubernetes node.
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: "3"
+              memory: 6Gi
           env:
             DB_HOSTNAME:
               valueFrom:
@@ -77,6 +97,17 @@ server:
 
 machine-learning:
   enabled: true
+  controllers:
+    main:
+      containers:
+        main:
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: "2"
+              memory: 4Gi
   persistence:
     cache:
       enabled: true
