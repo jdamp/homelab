@@ -11,24 +11,37 @@ terraform -chdir=terraform/authentik apply
 
 kubectl create secret generic argocd-authentik \
   --namespace argocd \
-  --labels app.kubernetes.io/part-of=argocd \
   --from-literal=clientSecret="$(terraform -chdir=terraform/authentik output -raw argocd_oauth_client_secret)" \
   --dry-run=client -o yaml \
+  | kubectl label --local --overwrite -f - app.kubernetes.io/part-of=argocd -o yaml \
   | kubeseal --namespace argocd --controller-namespace sealed-secrets --format yaml \
   | kubectl apply -f -
 
-kubectl -n argocd patch configmap argocd-cm --type merge --patch '{
-  "data": {
-    "url": "https://argocd.mauzlab.de",
-    "dex.config": "connectors:\\n- type: oidc\\n  id: authentik\\n  name: Authentik\\n  config:\\n    issuer: https://auth.mauzlab.de/application/o/argocd/\\n    clientID: argocd\\n    clientSecret: $argocd-authentik:clientSecret\\n    insecureEnableGroups: true\\n    scopes:\\n    - openid\\n    - profile\\n    - email"
-  }
-}'
+kubectl -n argocd patch configmap argocd-cm --type merge --patch-file /dev/stdin <<'EOF'
+data:
+  url: https://argocd.mauzlab.de
+  dex.config: |
+    connectors:
+      - type: oidc
+        id: authentik
+        name: Authentik
+        config:
+          issuer: https://auth.mauzlab.de/application/o/argocd/
+          clientID: argocd
+          clientSecret: $argocd-authentik:clientSecret
+          insecureEnableGroups: true
+          scopes:
+            - openid
+            - profile
+            - email
+EOF
 
-kubectl -n argocd patch configmap argocd-rbac-cm --type merge --patch '{
-  "data": {
-    "policy.csv": "g, homelab-admins, role:admin\\ng, homelab-users, role:readonly"
-  }
-}'
+kubectl -n argocd patch configmap argocd-rbac-cm --type merge --patch-file /dev/stdin <<'EOF'
+data:
+  policy.csv: |
+    g, homelab-admins, role:admin
+    g, homelab-users, role:readonly
+EOF
 ```
 
 Verify with `argocd login argocd.mauzlab.de --sso`. Users must log in again
