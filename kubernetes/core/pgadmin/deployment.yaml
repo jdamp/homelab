@@ -15,6 +15,11 @@ spec:
       labels:
         app: pgadmin
     spec:
+      securityContext:
+        # The pgAdmin image runs as UID/GID 5050.  Ensure the mounted PVC is
+        # writable by that group so pgAdmin can create its storage directory.
+        fsGroup: 5050
+        fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: pgadmin
           image: dpage/pgadmin4:9.17
