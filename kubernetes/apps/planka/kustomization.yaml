@@ -7,7 +7,7 @@ namespace: planka
 helmCharts:
   - name: planka
     repo: https://plankanban.github.io/planka
-    version: 2.1.0
+    version: 2.2.0
     releaseName: planka
     valuesFile: planka-values.yaml
 

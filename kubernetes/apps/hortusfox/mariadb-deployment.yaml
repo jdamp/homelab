@@ -17,7 +17,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: mariadb
-        image: mariadb:latest
+        image: mariadb:latest@sha256:1aed3452135970efc2fb44d423c070c604f1a47b66ce9000364c5c8bd318a212
         imagePullPolicy: IfNotPresent
         env:
         - name: MARIADB_ROOT_PASSWORD

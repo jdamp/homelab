@@ -4,7 +4,7 @@ metadata:
   name: postgres-shared
 spec:
   instances: 2
-  imageName: ghcr.io/cloudnative-pg/postgresql:18
+  imageName: ghcr.io/cloudnative-pg/postgresql:18@sha256:d01da8c508ecf8d540ea30ca24df927827697662a09a1286c702aa0bcd747be3
 
   storage:
     size: 10Gi

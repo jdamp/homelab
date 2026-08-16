@@ -17,7 +17,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: vaultwarden
-        image: vaultwarden/server:1.36.0-alpine
+        image: vaultwarden/server:1.37.1-alpine
         imagePullPolicy: IfNotPresent
         env:
         - name: DOMAIN
