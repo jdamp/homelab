@@ -22,6 +22,9 @@ spec:
             - containerPort: 80
               name: http
           env:
+            # Keep transient sessions off the existing persistent data volume.
+            - name: PGADMIN_CONFIG_SESSION_DB_PATH
+              value: "'/tmp/pgadmin-sessions'"
             - name: PGADMIN_DEFAULT_EMAIL
               valueFrom:
                 secretKeyRef:

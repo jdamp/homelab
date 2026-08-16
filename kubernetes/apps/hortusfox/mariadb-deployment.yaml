@@ -6,6 +6,9 @@ metadata:
     app: hortusfox-db
 spec:
   replicas: 1
+  # The database PVC is ReadWriteOnce, so detach it before starting a new pod.
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: hortusfox-db
