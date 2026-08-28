@@ -4,7 +4,7 @@ metadata:
   name: postgres-cluster
 spec:
   instances: 1
-  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16.9-0.4.3
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:17.10-1.1.1
 
   postgresql:
     shared_preload_libraries:
@@ -35,3 +35,5 @@ spec:
       isWALArchiver: true
       parameters:
         barmanObjectName: nas-s3-store
+        # Keep the PostgreSQL 17 archive separate from the retained PostgreSQL 16 history.
+        serverName: postgres-cluster-pg17
