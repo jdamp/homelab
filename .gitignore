@@ -18,3 +18,4 @@ Chart.lock
 # Kubernetes
 *secret*.yaml
 !*sealed-secrets.yaml
+kubernetes/MAJOR_VERSION_UPGRADE_PLAN.md
