@@ -11,25 +11,30 @@ window.
 | --- | --- | --- | --- | --- |
 | Homepage | `v1.13.2` | `v2.0.0` | Migrated 2026-08-27 (`0917171`) | `apps/homepage/deployment.yaml` |
 | Paperless-ngx | `2.20.15` | `3.0.5` | Migrated 2026-08-27 (`aa7755c`) | `apps/paperless-ngx/paperless/deployment.yaml` |
-| Immich application and machine learning | `v2.7.5` | `v3.1.0` | Next: application rehearsal | `apps/immich/immich-values.yaml` |
+| Immich application and machine learning | `v2.7.5` | `v3.1.0` | Rehearsed 2026-08-31; production go/no-go pending | `apps/immich/immich-values.yaml` |
 | Immich VectorChord/PostgreSQL | `16.9-0.4.3` | `17.10-1.1.1` | Migrated 2026-08-28 | `apps/immich/postgres/cluster.yaml` |
 
 Immich already uses VectorChord, not pgvecto.rs. This satisfies the Immich v3
 requirement to move away from pgvecto.rs.
 
-## Progress snapshot (2026-08-28)
+## Progress snapshot (2026-08-31)
 
 - Homepage and Paperless-ngx are deployed at their targets. Argo CD reports
   both applications `Synced` and `Healthy` at revision `aa7755c`.
-- Immich remains at application `v2.7.5`. Its database is healthy on
-  PostgreSQL `17.10`, VectorChord `1.1.1`, and pgvector `0.8.2`.
+- Production Immich remains at application `v2.7.5`. Its database is healthy
+  on PostgreSQL `17.10`, VectorChord `1.1.1`, and pgvector `0.8.2`. Argo CD is
+  `Synced` and `Healthy` at revision `0f349c80f0b4cfb45632abce50da2d931fead174`.
 - The final quiesced PostgreSQL 16 backup is `20260828T151130`. The first
   PostgreSQL 17 base backup is `20260828T151442`; WAL and backups use the
   separate `postgres-cluster-pg17` archive. Retain both backup lineages.
 - The live PostgreSQL 17 amd64 image digest is
   `sha256:f22538c11c6d0e9ade44d3224f2dccd6bad9b2e60034b2e118804f9ad35f59bf`.
-- The next action is the isolated Immich v3 application rehearsal. Keep it
-  separate from the completed database maintenance window.
+- Scheduled PostgreSQL 17 backup `20260830T030000` completed and was restored
+  successfully into `immich-v3-rehearsal/postgres-v3-rehearsal`.
+- Immich v3.1.0 passed the isolated application rehearsal against that restore.
+  The production tag change is prepared locally, but must not be pushed until
+  the application maintenance window and irreversible schema-migration
+  go/no-go are confirmed.
 
 ## Global preflight gate
 
@@ -53,7 +58,7 @@ manifest:
 1. Homepage v2 — migrated
 2. Paperless-ngx v3 — migrated
 3. Immich VectorChord/PostgreSQL 17 — migrated
-4. Immich v3 — next
+4. Immich v3 — rehearsed; production pending
 
 This keeps the two database-changing operations separate and moves the
 Immich application only after its target database has been accepted.
@@ -247,14 +252,56 @@ References: [CloudNativePG PostgreSQL upgrades](https://cloudnative-pg.io/docs/1
 
 ### Procedure
 
-1. Update the image tag in `apps/immich/immich-values.yaml` to the selected
-   v3 release after the PostgreSQL 17 cutover is accepted.
-2. Let Argo CD roll the server and machine-learning workloads, then watch for
-   schema migrations and job failures.
-3. Validate OIDC, web and mobile login, uploads, search, machine learning,
+1. Confirm all mobile clients are v3 compatible and recheck any API consumers
+   that are maintained outside this repository.
+2. During the maintenance window, stop Immich writes and confirm PostgreSQL
+   has no application sessions. Take a final PostgreSQL 17 backup and verify
+   that Barman reports it as `DONE` in the `postgres-cluster-pg17` archive.
+3. Make the irreversible go/no-go decision only after that backup is verified.
+   Push the dedicated `v3.1.0` application manifest commit after approval.
+4. Let Argo CD roll the server and machine-learning workloads, then watch for
+   completed migrations, no schema drift, storage-integrity checks, and job
+   failures.
+5. Validate OIDC, web and mobile login, uploads, search, machine learning,
    background jobs, sharing, API automation, and the new integrity report.
-4. Re-run metadata extraction if the new v3 video-processing features are to
+6. Re-run metadata extraction if the new v3 video-processing features are to
    be used on assets imported before v3.
+
+### Rehearsal result (2026-08-31)
+
+- Restored scheduled PostgreSQL 17 backup `20260830T030000` into the new,
+  isolated `immich-v3-rehearsal/postgres-v3-rehearsal` cluster. PostgreSQL
+  17.10, VectorChord 1.1.1, pgvector 0.8.2, and earthdistance 1.2 were healthy.
+  Baseline counts matched production: 32,507 assets, 37 albums, 2,227 people,
+  one user, and 32,482 EXIF rows.
+- Deployed chart 0.13.1 with Immich server and machine learning `v3.1.0`, no
+  ingress, isolated Valkey, and scratch library/cache volumes. Migrations
+  completed, the schema-drift check passed, and the version history recorded
+  3.1.0. The first server process then stopped because the intentionally empty
+  scratch library lacked `.immich` integrity markers. After initializing the
+  empty volume like a fresh installation, the replacement pod started cleanly.
+  Post-migration record counts remained unchanged.
+- The server and machine-learning pods became ready with zero restarts. The
+  ping endpoint returned `pong`, the version endpoint returned `3.1.0`, the
+  machine-learning ping returned `pong`, and OAuth remained enabled with the
+  Authentik button configuration. The target server and machine-learning image
+  IDs were respectively
+  `sha256:b434cb9287eea1471c9974845914d4dd328c9c2d652e446ed4930f99944f0ceb`
+  and
+  `sha256:5a0839dc5303cd7215bcd2180a26aed3af41675aefb3e75e5157e9f10ad16e6e`.
+- Both `clip_index` and `face_index` served representative indexed similarity
+  queries. Smart-search returned five rows in 60 ms and face-search returned
+  five rows in 21 ms in the isolated cluster.
+- The v3.1.0 machine-learning image started successfully on both schedulable
+  amd64 workers, satisfying the x86-64-v2 runtime gate. The manifest contains
+  none of the removed user-configured machine-learning environment variables.
+- The repository API-consumer audit found only a normal Homepage link to
+  Immich and no Immich API widget or automation. External consumers still
+  require confirmation at the production go/no-go.
+- Because the rehearsal intentionally used a scratch media volume and no
+  ingress, real-library reads, upload processing, browser/mobile OIDC, sharing,
+  and the integrity report remain production-window acceptance tests. Retain
+  the rehearsal namespace through production acceptance.
 
 ### Rollback
 
