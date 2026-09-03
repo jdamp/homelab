@@ -11,30 +11,33 @@ window.
 | --- | --- | --- | --- | --- |
 | Homepage | `v1.13.2` | `v2.0.0` | Migrated 2026-08-27 (`0917171`) | `apps/homepage/deployment.yaml` |
 | Paperless-ngx | `2.20.15` | `3.0.5` | Migrated 2026-08-27 (`aa7755c`) | `apps/paperless-ngx/paperless/deployment.yaml` |
-| Immich application and machine learning | `v2.7.5` | `v3.1.0` | Rehearsed 2026-08-31; production go/no-go pending | `apps/immich/immich-values.yaml` |
+| Immich application and machine learning | `v2.7.5` | `v3.1.0` | Deployed 2026-09-03 (`610786f`); manual acceptance pending | `apps/immich/immich-values.yaml` |
 | Immich VectorChord/PostgreSQL | `16.9-0.4.3` | `17.10-1.1.1` | Migrated 2026-08-28 | `apps/immich/postgres/cluster.yaml` |
 
 Immich already uses VectorChord, not pgvecto.rs. This satisfies the Immich v3
 requirement to move away from pgvecto.rs.
 
-## Progress snapshot (2026-08-31)
+## Progress snapshot (2026-09-03)
 
 - Homepage and Paperless-ngx are deployed at their targets. Argo CD reports
   both applications `Synced` and `Healthy` at revision `aa7755c`.
-- Production Immich remains at application `v2.7.5`. Its database is healthy
-  on PostgreSQL `17.10`, VectorChord `1.1.1`, and pgvector `0.8.2`. Argo CD is
-  `Synced` and `Healthy` at revision `0f349c80f0b4cfb45632abce50da2d931fead174`.
+- Production Immich is deployed at application and machine learning `v3.1.0`.
+  Its database is healthy on PostgreSQL `17.10`, VectorChord `1.1.1`, and
+  pgvector `0.8.2`. Argo CD is `Synced` and `Healthy` at revision
+  `610786fd9a4a92e9069fa1a50a46af46e3b4bbe9`.
 - The final quiesced PostgreSQL 16 backup is `20260828T151130`. The first
   PostgreSQL 17 base backup is `20260828T151442`; WAL and backups use the
   separate `postgres-cluster-pg17` archive. Retain both backup lineages.
 - The live PostgreSQL 17 amd64 image digest is
   `sha256:f22538c11c6d0e9ade44d3224f2dccd6bad9b2e60034b2e118804f9ad35f59bf`.
-- Scheduled PostgreSQL 17 backup `20260830T030000` completed and was restored
-  successfully into `immich-v3-rehearsal/postgres-v3-rehearsal`.
-- Immich v3.1.0 passed the isolated application rehearsal against that restore.
-  The production tag change is prepared locally, but must not be pushed until
-  the application maintenance window and irreversible schema-migration
-  go/no-go are confirmed.
+- Scheduled PostgreSQL 17 backup `20260830T030000` was restored successfully
+  into `immich-v3-rehearsal/postgres-v3-rehearsal` for the application
+  rehearsal. Final quiesced pre-v3 backup `20260903T062115` is `DONE` in the
+  `postgres-cluster-pg17` archive.
+- Immich v3.1.0 passed the isolated rehearsal and automated production checks.
+  Retain the rehearsal, backup, and prior manifest commit until authenticated
+  browser/mobile, upload, sharing, and integrity-report checks pass and the
+  application completes at least one full backup cycle.
 
 ## Global preflight gate
 
@@ -58,7 +61,7 @@ manifest:
 1. Homepage v2 — migrated
 2. Paperless-ngx v3 — migrated
 3. Immich VectorChord/PostgreSQL 17 — migrated
-4. Immich v3 — rehearsed; production pending
+4. Immich v3 — deployed; manual acceptance pending
 
 This keeps the two database-changing operations separate and moves the
 Immich application only after its target database has been accepted.
@@ -302,6 +305,44 @@ References: [CloudNativePG PostgreSQL upgrades](https://cloudnative-pg.io/docs/1
   ingress, real-library reads, upload processing, browser/mobile OIDC, sharing,
   and the integrity report remain production-window acceptance tests. Retain
   the rehearsal namespace through production acceptance.
+
+### Production result (2026-09-03)
+
+- Scaled the server and machine-learning deployments to zero and confirmed
+  PostgreSQL had no remaining Immich sessions. The final pre-migration counts
+  were 32,507 assets, 37 albums, 2,227 people, one user, and 32,482 EXIF rows.
+- Backup resource `immich-v3-preupgrade-20260903` completed as Barman backup
+  `20260903T062115`, covering WAL `000000010000003600000029`. A direct object
+  store catalog check reported the backup as `DONE` in the
+  `postgres-cluster-pg17` archive.
+- Pushed dedicated application commit `610786f` and manually synced that exact
+  revision through Argo CD with pruning disabled. Database migrations finished
+  in approximately two seconds, the production storage-integrity checks
+  passed, and the version history recorded 3.1.0.
+- One API worker reported schema drift during the initial two-worker migration
+  race while the microservices worker reported no drift. The explicit
+  `immich-admin schema-check` immediately reported current migrations and no
+  drift. A controlled server-pod replacement then produced clean no-drift
+  results from both workers.
+- Argo CD is `Synced` and `Healthy`. Server, machine learning, and Valkey are
+  ready with zero restarts. The v3 server and machine-learning image IDs are
+  respectively
+  `sha256:b434cb9287eea1471c9974845914d4dd328c9c2d652e446ed4930f99944f0ceb`
+  and
+  `sha256:5a0839dc5303cd7215bcd2180a26aed3af41675aefb3e75e5157e9f10ad16e6e`.
+- Both internal and public HTTPS ping/version checks returned `pong` and
+  `3.1.0`; the public web route returned HTTP 200. Immich generated a valid
+  Authentik authorization redirect, OAuth remained enabled, and the
+  machine-learning service returned `pong`.
+- The production media mount contains readable data and all six Immich mount
+  markers passed. Post-migration counts remained unchanged. PostgreSQL retained
+  earthdistance 1.2, VectorChord 1.1.1, and pgvector 0.8.2. `clip_index` and
+  `face_index` served representative indexed searches in approximately 10 ms,
+  and the new `integrity_report` table exists.
+- Authenticated browser/mobile OIDC, upload and OCR processing, document/media
+  download, background-job completion, sharing, API automation, and generation
+  of an integrity report require manual user acceptance before closing the
+  maintenance item.
 
 ### Rollback
 
