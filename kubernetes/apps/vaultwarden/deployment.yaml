@@ -22,6 +22,36 @@ spec:
         env:
         - name: DOMAIN
           value: "https://passwort.mauzlab.de"
+        # Authentik OIDC. Keep email/master-password login available during
+        # rollout; Vaultwarden still requires the vault master password to
+        # decrypt vault contents after SSO authentication.
+        - name: SSO_ENABLED
+          value: "true"
+        - name: SSO_ONLY
+          value: "false"
+        - name: SSO_SIGNUPS_MATCH_EMAIL
+          value: "true"
+        - name: SSO_ALLOW_UNKNOWN_EMAIL_VERIFICATION
+          value: "false"
+        - name: SSO_AUTHORITY
+          value: "https://auth.mauzlab.de/application/o/vaultwarden/"
+        - name: SSO_SCOPES
+          # Vaultwarden adds openid implicitly.
+          value: "profile email offline_access"
+        - name: SSO_PKCE
+          value: "true"
+        - name: SSO_CLIENT_CACHE_EXPIRATION
+          value: "600"
+        - name: SSO_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: vaultwarden-oidc
+              key: client-id
+        - name: SSO_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: vaultwarden-oidc
+              key: client-secret
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:

@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: vaultwarden
 
 resources:
+  - oidc-sealed-secrets.yaml
   - deployment.yaml
   - service.yaml
   - pvc.yaml

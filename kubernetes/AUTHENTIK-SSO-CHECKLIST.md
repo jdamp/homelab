@@ -4,7 +4,7 @@ This checklist tracks services that are deployed in the homelab but are not
 currently integrated with Authentik.
 
 Already integrated: Argo CD, Grafana, Homepage, Immich, Linkding, Mealie,
-Paperless-ngx, and Planka.
+Paperless-ngx, pgAdmin, and Planka.
 
 ## Shared preparation
 
@@ -79,29 +79,36 @@ Integration type: native OIDC.
       `homelab-users` and `homelab-admins`.
 - [x] Pre-create the OIDC user as a pgAdmin administrator and copy the existing
       server registration without a saved database password.
-- [ ] Verify both an OIDC user and the local break-glass administrator can log
-      in before considering removal of `internal` authentication.
+- [x] Verify the OIDC administrator can log in.
+- [ ] Verify the local break-glass administrator can still log in before
+      considering removal of `internal` authentication.
 
 ## Priority 4: Vaultwarden
 
 Integration type: native OIDC with a separate vault master password.
 
-- [ ] Back up the Vaultwarden database and `/data` volume.
-- [ ] Create an Authentik OAuth2/OIDC provider and application for
+- [x] Confirm a current shared-database backup and create a pre-SSO `/data`
+      archive.
+- [x] Create an Authentik OAuth2/OIDC provider and application for
       Vaultwarden.
-- [ ] Configure the callback URL:
+- [x] Configure the callback URL:
       `https://passwort.mauzlab.de/identity/connect/oidc-signin`.
-- [ ] Add a SealedSecret for `SSO_CLIENT_ID` and `SSO_CLIENT_SECRET`.
-- [ ] Set `SSO_ENABLED=true` and configure `SSO_AUTHORITY` to the exact
+- [x] Add a SealedSecret for `SSO_CLIENT_ID` and `SSO_CLIENT_SECRET`.
+- [x] Set `SSO_ENABLED=true` and configure `SSO_AUTHORITY` to the exact
       Authentik issuer URL.
-- [ ] Request the `openid`, `profile`, and `email` scopes and ensure Authentik
-      supplies `email_verified` and `preferred_username`.
+- [x] Request `openid`, `profile`, `email`, and `offline_access`; use a
+      provider-specific email mapping that supplies `email_verified=true`.
+- [x] Enable PKCE and confirm Vaultwarden redirects to Authentik with the
+      expected client, callback, and scopes.
+- [x] Confirm the existing Vaultwarden account email matches the Authentik
+      identity before first SSO login.
 - [ ] Test linking with an existing Vaultwarden account before enabling
       `SSO_ONLY` or changing signup behavior.
 - [ ] Verify web vault, browser extension, and mobile-client login flows.
 - [ ] Confirm users understand that the vault master password is still needed
       to decrypt vault contents after Authentik login.
-- [ ] Retain and test an emergency local administrative path.
+- [x] Retain email/master-password login by keeping `SSO_ONLY=false`.
+- [ ] Test the retained email/master-password login after SSO account linking.
 
 ## Priority 5: HortusFox
 

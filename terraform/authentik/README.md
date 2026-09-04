@@ -12,6 +12,7 @@ Managed by default:
 - Homepage: OIDC provider and application for `https://home.mauzlab.de`.
 - Linkding: OIDC provider and application for `https://links.mauzlab.de`.
 - pgAdmin: OIDC provider and application for `https://pgadmin.mauzlab.de`.
+- Vaultwarden: OIDC provider and application for `https://passwort.mauzlab.de`.
 
 ## Usage
 
@@ -132,6 +133,20 @@ OAuth users have separate pgAdmin settings and server registrations. Prepare
 the matching external user with pgAdmin's `setup.py add-external-user` command
 and copy or import any required server registrations before enforcing OAuth-only
 authentication. Retain the internal administrator as the break-glass account.
+
+Vaultwarden expects the Authentik provider to allow
+`https://passwort.mauzlab.de/identity/connect/oidc-signin`. Its deployment
+uses `https://auth.mauzlab.de/application/o/vaultwarden/` as the exact issuer,
+requests `profile email offline_access` in addition to Vaultwarden's implicit
+`openid` scope, and reads its client credentials from the SealedSecret-backed
+`vaultwarden-oidc` Secret.
+
+The provider uses a Vaultwarden-specific email mapping that emits
+`email_verified=true`; the managed Authentik email mapping emits `false`, which
+Vaultwarden rejects for account linking. Keep `SSO_SIGNUPS_MATCH_EMAIL=true`
+only when Authentik's email matches the existing vault account. `SSO_ONLY`
+remains false during rollout, and the vault master password is still required
+to decrypt vault contents after Authentik authentication.
 
 ## Adding OAuth Apps
 
