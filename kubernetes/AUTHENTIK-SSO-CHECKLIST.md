@@ -3,8 +3,8 @@
 This checklist tracks services that are deployed in the homelab but are not
 currently integrated with Authentik.
 
-Already integrated: Argo CD, Grafana, Immich, Mealie, Paperless-ngx, and
-Planka.
+Already integrated: Argo CD, Grafana, Homepage, Immich, Linkding, Mealie,
+Paperless-ngx, and Planka.
 
 ## Shared preparation
 
@@ -41,17 +41,17 @@ Integration type: native OIDC.
 
 Integration type: native OIDC with automatic user creation.
 
-- [ ] Create an Authentik OAuth2/OIDC provider and application for Linkding.
-- [ ] Configure the callback URL:
+- [x] Create an Authentik OAuth2/OIDC provider and application for Linkding.
+- [x] Configure the callback URL:
       `https://links.mauzlab.de/oidc/callback/`.
-- [ ] Add a SealedSecret for `OIDC_RP_CLIENT_ID` and
+- [x] Add a SealedSecret for `OIDC_RP_CLIENT_ID` and
       `OIDC_RP_CLIENT_SECRET`.
-- [ ] Add `LD_ENABLE_OIDC=True`.
-- [ ] Configure the Authentik authorization, token, userinfo, and JWKS
+- [x] Add `LD_ENABLE_OIDC=True`.
+- [x] Configure the Authentik authorization, token, userinfo, and JWKS
       endpoints through the corresponding `OIDC_OP_*` variables.
-- [ ] Set `OIDC_USERNAME_CLAIM=preferred_username`, if usernames rather than
+- [x] Set `OIDC_USERNAME_CLAIM=preferred_username`, if usernames rather than
       email addresses should be used for newly created accounts.
-- [ ] Ensure the existing administrator account has an email matching the
+- [x] Ensure the existing administrator account has an email matching the
       Authentik identity before its first OIDC login.
 - [ ] Verify the browser extension and API-token clients continue to work.
 - [ ] After validating the break-glass account, consider setting

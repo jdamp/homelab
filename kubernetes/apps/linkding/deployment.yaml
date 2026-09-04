@@ -32,6 +32,37 @@ spec:
                 secretKeyRef:
                   name: linkding-secrets
                   key: LD_SUPERUSER_PASSWORD
+            # OpenID Connect via Authentik. Keep local login enabled during rollout.
+            - name: LD_ENABLE_OIDC
+              value: "True"
+            - name: LD_CSRF_TRUSTED_ORIGINS
+              value: "https://links.mauzlab.de"
+            - name: OIDC_OP_AUTHORIZATION_ENDPOINT
+              value: "https://auth.mauzlab.de/application/o/authorize/"
+            - name: OIDC_OP_TOKEN_ENDPOINT
+              value: "https://auth.mauzlab.de/application/o/token/"
+            - name: OIDC_OP_USER_ENDPOINT
+              value: "https://auth.mauzlab.de/application/o/userinfo/"
+            - name: OIDC_OP_JWKS_ENDPOINT
+              value: "https://auth.mauzlab.de/application/o/linkding/jwks/"
+            - name: OIDC_RP_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: linkding-oidc
+                  key: client-id
+            - name: OIDC_RP_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: linkding-oidc
+                  key: client-secret
+            - name: OIDC_RP_SCOPES
+              value: "openid email profile"
+            - name: OIDC_RP_SIGN_ALGO
+              value: "RS256"
+            - name: OIDC_USE_PKCE
+              value: "True"
+            - name: OIDC_USERNAME_CLAIM
+              value: "preferred_username"
             # PostgreSQL configuration
             - name: LD_DB_ENGINE
               value: postgres

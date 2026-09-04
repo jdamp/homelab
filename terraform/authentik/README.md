@@ -10,6 +10,7 @@ Managed by default:
 - Argo CD: OIDC provider and application for `https://argocd.mauzlab.de`.
 - Planka: OIDC provider and application for `https://todo.mauzlab.de`.
 - Homepage: OIDC provider and application for `https://home.mauzlab.de`.
+- Linkding: OIDC provider and application for `https://links.mauzlab.de`.
 
 ## Usage
 
@@ -104,6 +105,19 @@ If OIDC access fails, the GitOps rollback is to remove
 `HOMEPAGE_AUTH_ENABLED` and the related `HOMEPAGE_OIDC_*`/`HOMEPAGE_AUTH_SECRET`
 variables from the Homepage deployment and resync it. Homepage will then return
 to its previous unauthenticated behavior.
+
+Linkding expects the Authentik provider to allow
+`https://links.mauzlab.de/oidc/callback/`. Its deployment reads the client ID
+and secret from the SealedSecret-backed `linkding-oidc` Secret and configures
+the Authentik authorization, token, userinfo, and JWKS endpoints directly.
+The discovery URL is available through
+`terraform output -raw linkding_oidc_discovery_url`.
+
+Linkding matches existing users by email during OIDC login. Ensure an existing
+account's email matches its Authentik identity before the first login to avoid
+creating a duplicate user. Local login remains enabled as a break-glass path;
+only set `LD_DISABLE_LOGIN_FORM=True` after OIDC and API-token clients have
+been verified.
 
 ## Adding OAuth Apps
 
