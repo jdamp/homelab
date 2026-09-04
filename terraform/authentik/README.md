@@ -9,6 +9,7 @@ Managed by default:
 - Immich: OIDC provider and application for `https://fotos.mauzlab.de`.
 - Argo CD: OIDC provider and application for `https://argocd.mauzlab.de`.
 - Planka: OIDC provider and application for `https://todo.mauzlab.de`.
+- Homepage: OIDC provider and application for `https://home.mauzlab.de`.
 
 ## Usage
 
@@ -92,6 +93,17 @@ kubectl create secret generic planka-oidc-secret \
 
 Then set `oidc.enabled: true` in `kubernetes/apps/planka/planka-values.yaml`
 and add `oidc-sealed-secrets.yaml` to `kubernetes/apps/planka/kustomization.yaml`.
+
+Homepage expects the Authentik provider to allow
+`https://home.mauzlab.de/api/auth/callback/homepage-oidc`. Its deployment reads
+the OAuth client ID, OAuth client secret, and session encryption secret from the
+SealedSecret-backed `homepage-oidc` Secret. The issuer URL is available through
+`terraform output -raw homepage_oidc_issuer_url`.
+
+If OIDC access fails, the GitOps rollback is to remove
+`HOMEPAGE_AUTH_ENABLED` and the related `HOMEPAGE_OIDC_*`/`HOMEPAGE_AUTH_SECRET`
+variables from the Homepage deployment and resync it. Homepage will then return
+to its previous unauthenticated behavior.
 
 ## Adding OAuth Apps
 

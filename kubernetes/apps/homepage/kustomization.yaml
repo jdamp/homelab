@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - service-account.yaml
   - secret.yaml
+  - oidc-sealed-secrets.yaml
   - cluster-role.yaml
   - deployment.yaml
   - service.yaml
