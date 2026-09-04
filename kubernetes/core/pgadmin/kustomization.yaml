@@ -4,6 +4,7 @@ namespace: pgadmin
 
 resources:
   - sealed-secrets.yaml
+  - oidc-sealed-secrets.yaml
   - pvc.yaml
   - deployment.yaml
   - service.yaml

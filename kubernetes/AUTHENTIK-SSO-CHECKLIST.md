@@ -53,6 +53,7 @@ Integration type: native OIDC with automatic user creation.
       email addresses should be used for newly created accounts.
 - [x] Ensure the existing administrator account has an email matching the
       Authentik identity before its first OIDC login.
+- [x] Verify interactive browser login through Authentik.
 - [ ] Verify the browser extension and API-token clients continue to work.
 - [ ] After validating the break-glass account, consider setting
       `LD_DISABLE_LOGIN_FORM=True`.
@@ -61,20 +62,23 @@ Integration type: native OIDC with automatic user creation.
 
 Integration type: native OIDC.
 
-- [ ] Create an Authentik OAuth2/OIDC provider and application for pgAdmin.
-- [ ] Configure the callback URL:
+- [x] Create an Authentik OAuth2/OIDC provider and application for pgAdmin.
+- [x] Configure the callback URL:
       `https://pgadmin.mauzlab.de/oauth2/authorize`.
-- [ ] Store the client secret in a SealedSecret.
-- [ ] Set `PGADMIN_CONFIG_AUTHENTICATION_SOURCES` to include `oauth2` and keep
+- [x] Store the complete OAuth provider configuration, including the client
+      secret, in a SealedSecret.
+- [x] Set `PGADMIN_CONFIG_AUTHENTICATION_SOURCES` to include `oauth2` and keep
       `internal` during rollout.
-- [ ] Set the complete provider list through
+- [x] Set the complete provider list through
       `PGADMIN_CONFIG_OAUTH2_CONFIG`; pgAdmin does not accept the individual
       provider settings as separate top-level variables.
-- [ ] Use Authentik's OIDC discovery URL and request `openid email profile`.
-- [ ] Enable automatic pgAdmin user creation if desired.
-- [ ] Restrict access using the Authentik group claim.
-- [ ] Decide how database passwords should be encrypted for OIDC users and
-      test saved server credentials.
+- [x] Use Authentik's OIDC discovery URL and request `openid email profile`.
+- [x] Enable the authorization-code flow with S256 PKCE.
+- [x] Enable automatic pgAdmin user creation.
+- [x] Restrict access through Authentik application bindings for
+      `homelab-users` and `homelab-admins`.
+- [x] Pre-create the OIDC user as a pgAdmin administrator and copy the existing
+      server registration without a saved database password.
 - [ ] Verify both an OIDC user and the local break-glass administrator can log
       in before considering removal of `internal` authentication.
 

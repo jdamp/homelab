@@ -11,6 +11,7 @@ Managed by default:
 - Planka: OIDC provider and application for `https://todo.mauzlab.de`.
 - Homepage: OIDC provider and application for `https://home.mauzlab.de`.
 - Linkding: OIDC provider and application for `https://links.mauzlab.de`.
+- pgAdmin: OIDC provider and application for `https://pgadmin.mauzlab.de`.
 
 ## Usage
 
@@ -118,6 +119,19 @@ account's email matches its Authentik identity before the first login to avoid
 creating a duplicate user. Local login remains enabled as a break-glass path;
 only set `LD_DISABLE_LOGIN_FORM=True` after OIDC and API-token clients have
 been verified.
+
+pgAdmin expects the Authentik provider to allow
+`https://pgadmin.mauzlab.de/oauth2/authorize`. The deployment keeps both
+`oauth2` and `internal` authentication enabled and reads the complete
+`PGADMIN_CONFIG_OAUTH2_CONFIG` provider list from the SealedSecret-backed
+`pgadmin-oidc` Secret. The discovery URL is available through
+`terraform output -raw pgadmin_oidc_discovery_url`; the login flow also uses
+S256 PKCE.
+
+OAuth users have separate pgAdmin settings and server registrations. Prepare
+the matching external user with pgAdmin's `setup.py add-external-user` command
+and copy or import any required server registrations before enforcing OAuth-only
+authentication. Retain the internal administrator as the break-glass account.
 
 ## Adding OAuth Apps
 
