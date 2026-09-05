@@ -1,4 +1,8 @@
 - Core:
+    - Proxmox:
+        href: https://192.168.69.3:8006
+        icon: proxmox.png
+        description: Virtual Machine Management
     - NAS:
         href: http://DXP2800
         icon: ugreen-nas.png
