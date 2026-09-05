@@ -5,7 +5,27 @@ variable "mealie_hostname" {
 }
 
 data "authentik_property_mapping_provider_scope" "mealie_default" {
-  managed_list = local.default_oauth_scope_mappings
+  managed_list = [
+    "goauthentik.io/providers/oauth2/scope-openid",
+    "goauthentik.io/providers/oauth2/scope-profile",
+  ]
+}
+
+# Mealie requires verified email for account linking. This provider trusts
+# administrator-managed email addresses; public signup and unverified email
+# changes must remain unavailable to users.
+resource "authentik_property_mapping_provider_scope" "mealie_email" {
+  name       = "Mealie OAuth Mapping: verified email"
+  scope_name = "email"
+  expression = <<-EOT
+    if not request.user.email:
+        return {}
+
+    return {
+        "email": request.user.email,
+        "email_verified": True,
+    }
+  EOT
 }
 
 resource "authentik_property_mapping_provider_scope" "mealie_groups" {
@@ -50,7 +70,10 @@ module "mealie" {
   signing_key     = "0f5d4208-fad4-47aa-90ef-4b7ffd548fc8"
   property_mapping_ids = concat(
     data.authentik_property_mapping_provider_scope.mealie_default.ids,
-    [authentik_property_mapping_provider_scope.mealie_groups.id],
+    [
+      authentik_property_mapping_provider_scope.mealie_email.id,
+      authentik_property_mapping_provider_scope.mealie_groups.id,
+    ],
   )
 }
 

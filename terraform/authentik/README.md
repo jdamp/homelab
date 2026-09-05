@@ -13,6 +13,7 @@ Managed by default:
 - Linkding: OIDC provider and application for `https://links.mauzlab.de`.
 - pgAdmin: OIDC provider and application for `https://pgadmin.mauzlab.de`.
 - Vaultwarden: OIDC provider and application for `https://passwort.mauzlab.de`.
+- Mealie: OIDC provider and application for `https://futter.mauzlab.de`.
 
 ## Usage
 
@@ -147,6 +148,21 @@ Vaultwarden rejects for account linking. Keep `SSO_SIGNUPS_MATCH_EMAIL=true`
 only when Authentik's email matches the existing vault account. `SSO_ONLY`
 remains false during rollout, and the vault master password is still required
 to decrypt vault contents after Authentik authentication.
+
+## Mealie email verification
+
+Mealie v3.21.0 and later require `email_verified=true` for OIDC login. Its
+provider replaces Authentik's managed email scope mapping with a Mealie-specific
+mapping that asserts verification for nonempty email addresses. Mealie's email
+verification check remains enabled.
+
+This follows the homelab's trust model: the administrator controls account
+creation and email addresses. Public signup and user changes to unverified email
+addresses must remain disabled. The mapping asserts administrator trust; it does
+not perform mailbox verification. Revisit it before allowing either capability.
+
+Apply the Authentik Terraform change and start a fresh Mealie login to obtain the
+updated claim. No Mealie restart or client-secret change is required.
 
 ## Adding OAuth Apps
 
