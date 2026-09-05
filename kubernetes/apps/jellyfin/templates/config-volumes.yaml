@@ -1,0 +1,28 @@
+# Configuration is copied from the original NFS claim before switching Jellyfin.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyfin-config-local
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 5Gi
+---
+# Retain the original config as a migration recovery copy. It is not mounted by
+# Jellyfin after migration and will not receive subsequent configuration changes.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyfin-config
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: nfs-nas
+  resources:
+    requests:
+      storage: 5Gi
