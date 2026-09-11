@@ -9,7 +9,7 @@ the first sync so the network-reachable daemon is never unauthenticated:
 
 ```sh
 kubectl create namespace paseo --dry-run=client -o yaml | kubectl apply -f -
-PASEO_PASSWORD="$(openssl rand -base64 32)"
+PASEO_PASSWORD="$(openssl rand -hex 32)"
 printf 'Save this Paseo password: %s\n' "$PASEO_PASSWORD"
 kubectl --namespace paseo create secret generic paseo-auth \
   --from-literal=password="$PASEO_PASSWORD"
@@ -19,7 +19,7 @@ unset PASEO_PASSWORD
 For a fully GitOps-managed secret, seal it for this namespace instead:
 
 ```sh
-PASEO_PASSWORD="$(openssl rand -base64 32)"
+PASEO_PASSWORD="$(openssl rand -hex 32)"
 printf 'Save this Paseo password: %s\n' "$PASEO_PASSWORD"
 kubectl --namespace paseo create secret generic paseo-auth \
   --from-literal=password="$PASEO_PASSWORD" --dry-run=client -o yaml | \
