@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: paseo
+  labels:
+    app: paseo
+spec:
+  type: ClusterIP
+  selector:
+    app: paseo
+  ports:
+    - name: http
+      port: 6767
+      targetPort: http
+      protocol: TCP

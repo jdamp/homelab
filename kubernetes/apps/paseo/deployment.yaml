@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paseo
+  labels:
+    app: paseo
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: paseo
+  template:
+    metadata:
+      labels:
+        app: paseo
+    spec:
+      automountServiceAccountToken: false
+      serviceAccountName: paseo
+      terminationGracePeriodSeconds: 60
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: paseo
+          image: ghcr.io/jdamp/paseo-agents:0.7.2-codex0.153.4-pi0.85.1@sha256:b519fceb4e924689dbb1d15d9e1e0702c1e44578cfebaf8af115ede08f03ae2f
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 6767
+              protocol: TCP
+          env:
+            - name: PASEO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: paseo-auth
+                  key: password
+            - name: PASEO_HOSTNAMES
+              value: paseo.mauzlab.de
+            # Traefik reaches the pod from K3s' default pod CIDR. Trusting it is
+            # required for Paseo to honor X-Forwarded-Proto and advertise wss://.
+            - name: PASEO_TRUSTED_PROXIES
+              value: 10.42.0.0/16
+            - name: TZ
+              value: Europe/Berlin
+          volumeMounts:
+            - name: home
+              mountPath: /home/paseo
+            - name: workspace
+              mountPath: /workspace
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+          startupProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 24
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+      volumes:
+        - name: home
+          persistentVolumeClaim:
+            claimName: paseo-home
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: paseo-workspace
