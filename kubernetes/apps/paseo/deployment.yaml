@@ -38,6 +38,29 @@ spec:
                 secretKeyRef:
                   name: paseo-auth
                   key: password
+            - name: GH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: paseo-github
+                  key: GH_TOKEN
+            # Some GitHub integrations recognize only GITHUB_TOKEN. Keep both
+            # names backed by the same SealedSecret value.
+            - name: GITHUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: paseo-github
+                  key: GH_TOKEN
+            # Make regular HTTPS git operations use the token exposed to gh.
+            - name: GIT_CONFIG_COUNT
+              value: "2"
+            - name: GIT_CONFIG_KEY_0
+              value: credential.https://github.com.helper
+            - name: GIT_CONFIG_VALUE_0
+              value: ""
+            - name: GIT_CONFIG_KEY_1
+              value: credential.https://github.com.helper
+            - name: GIT_CONFIG_VALUE_1
+              value: "!gh auth git-credential"
             - name: PASEO_HOSTNAMES
               value: paseo.mauzlab.de
             # Traefik reaches the pod from K3s' default pod CIDR. Trusting it is

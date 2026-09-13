@@ -5,6 +5,7 @@ namespace: paseo
 
 resources:
   - sealed-secrets.yaml
+  - github-sealed-secrets.yaml
   - serviceaccount.yaml
   - pvc-home.yaml
   - pvc-workspace.yaml
