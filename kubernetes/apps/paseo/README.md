@@ -54,3 +54,31 @@ Kubernetes Secret and `secretKeyRef` environment variables.
 The pod intentionally receives no Kubernetes service-account token. If agents
 should operate on the cluster, mount a narrowly scoped kubeconfig or explicitly
 grant this ServiceAccount only the RBAC permissions the agents need.
+
+## Container builds
+
+Paseo includes a rootless BuildKit sidecar. The `buildctl` client is available
+on the agent's `PATH` and uses the sidecar automatically through
+`BUILDKIT_HOST`. Dockerfile builds can use the normal BuildKit Dockerfile
+frontend, for example:
+
+```sh
+buildctl build \
+  --frontend dockerfile.v0 \
+  --local context=/workspace/homelab \
+  --local dockerfile=/workspace/homelab \
+  --output type=oci,dest=/workspace/homelab/image.tar
+```
+
+The builder is isolated to the pod and does not expose the Kubernetes node's
+container runtime. Its cache is ephemeral and is rebuilt when the pod is
+recreated.
+
+The builder runs as UID/GID 1000 but allows privilege escalation for
+RootlessKit's `newuidmap`/`newgidmap` helpers. Its seccomp and AppArmor profiles
+are unconfined to permit rootless namespace and mount operations.
+`--oci-worker-no-process-sandbox` permits Dockerfile `RUN` steps with
+Kubernetes' masked `/proc`, but build processes share the builder's PID
+namespace and can signal builder processes or survive a build step. Only
+build trusted Dockerfiles. These exceptions apply to the BuildKit sidecar;
+Paseo retains `allowPrivilegeEscalation: false` and its default seccomp profile.

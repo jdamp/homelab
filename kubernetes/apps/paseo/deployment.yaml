@@ -24,6 +24,20 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile:
           type: RuntimeDefault
+      initContainers:
+        - name: buildkit-client
+          image: moby/buildkit:rootless
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -ec
+            - cp /usr/bin/buildctl /builder/bin/buildctl
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 0
+          volumeMounts:
+            - name: builder-bin
+              mountPath: /builder/bin
       containers:
         - name: paseo
           image: ghcr.io/jdamp/paseo-agents:0.7.2-codex0.153.4-pi0.85.1@sha256:b519fceb4e924689dbb1d15d9e1e0702c1e44578cfebaf8af115ede08f03ae2f
@@ -33,6 +47,12 @@ spec:
               containerPort: 6767
               protocol: TCP
           env:
+            # The buildkitd sidecar provides a Dockerfile-compatible builder
+            # without exposing the node's container runtime to the agent.
+            - name: BUILDKIT_HOST
+              value: unix:///run/user/1000/buildkit/buildkitd.sock
+            - name: PATH
+              value: /builder/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
             - name: PASEO_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -76,6 +96,10 @@ spec:
               mountPath: /home/paseo
             - name: workspace
               mountPath: /workspace
+            - name: buildkit-socket
+              mountPath: /run/user/1000/buildkit
+            - name: builder-bin
+              mountPath: /builder/bin
           resources:
             requests:
               cpu: 500m
@@ -103,6 +127,26 @@ spec:
             failureThreshold: 3
           securityContext:
             allowPrivilegeEscalation: false
+        - name: buildkitd
+          image: moby/buildkit:rootless
+          imagePullPolicy: IfNotPresent
+          args:
+            - --addr
+            - unix:///run/user/1000/buildkit/buildkitd.sock
+            # Required for rootless RUN steps with Kubernetes' masked /proc.
+            - --oci-worker-no-process-sandbox
+          securityContext:
+            # RootlessKit's newuidmap/newgidmap helpers require setuid privileges.
+            allowPrivilegeEscalation: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile:
+              type: Unconfined
+            appArmorProfile:
+              type: Unconfined
+          volumeMounts:
+            - name: buildkit-socket
+              mountPath: /run/user/1000/buildkit
       volumes:
         - name: home
           persistentVolumeClaim:
@@ -110,3 +154,7 @@ spec:
         - name: workspace
           persistentVolumeClaim:
             claimName: paseo-workspace
+        - name: buildkit-socket
+          emptyDir: {}
+        - name: builder-bin
+          emptyDir: {}
