@@ -44,6 +44,8 @@ spec:
             # required for Paseo to honor X-Forwarded-Proto and advertise wss://.
             - name: PASEO_TRUSTED_PROXIES
               value: 10.42.0.0/16
+            - name: OPENSPEC_TELEMETRY
+              value: "0"
             - name: TZ
               value: Europe/Berlin
           volumeMounts:
