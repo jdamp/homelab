@@ -1,0 +1,57 @@
+fullnameOverride: kaneo
+
+postgresql:
+  enabled: true
+  auth:
+    database: kaneo
+    username: kaneo
+    existingSecret: kaneo-secrets
+    secretKeys:
+      adminPasswordKey: postgres-password
+      userPasswordKey: postgres-password
+  persistence:
+    enabled: true
+    size: 8Gi
+    storageClass: local-path
+
+kaneo:
+  env:
+    clientUrl: "https://todo.mauzlab.de"
+    corsOrigins:
+      - "https://todo.mauzlab.de"
+    existingSecret:
+      enabled: true
+      name: kaneo-secrets
+      key: auth-secret
+    disableRegistration: false
+    disablePasswordRegistration: true
+  extraEnv:
+    - name: DISABLE_GUEST_ACCESS
+      value: "true"
+    - name: DISABLE_LOGIN_FORM
+      value: "true"
+    - name: CUSTOM_OAUTH_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: kaneo-oidc-secret
+          key: client-id
+    - name: CUSTOM_OAUTH_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: kaneo-oidc-secret
+          key: client-secret
+    - name: CUSTOM_OAUTH_AUTHORIZATION_URL
+      value: "https://auth.mauzlab.de/application/o/authorize/"
+    - name: CUSTOM_OAUTH_TOKEN_URL
+      value: "https://auth.mauzlab.de/application/o/token/"
+    - name: CUSTOM_OAUTH_USER_INFO_URL
+      value: "https://auth.mauzlab.de/application/o/userinfo/"
+    - name: CUSTOM_OAUTH_DISCOVERY_URL
+      value: "https://auth.mauzlab.de/application/o/kaneo/.well-known/openid-configuration"
+    - name: CUSTOM_OAUTH_LOGOUT_URL
+      value: "https://auth.mauzlab.de/application/o/kaneo/end-session/"
+    - name: CUSTOM_OAUTH_SCOPES
+      value: "openid,profile,email"
+
+ingress:
+  enabled: false

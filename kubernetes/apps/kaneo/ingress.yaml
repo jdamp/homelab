@@ -1,8 +1,8 @@
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: planka-ingress
-  namespace: planka
+  name: kaneo-ingress
+  namespace: kaneo
 spec:
   entryPoints:
     - websecure
@@ -10,6 +10,6 @@ spec:
     - kind: Rule
       match: Host(`todo.mauzlab.de`)
       services:
-        - name: planka
-          port: 1337
+        - name: kaneo-kaneo
+          port: 5173
   tls: {}

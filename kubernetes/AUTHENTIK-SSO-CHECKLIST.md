@@ -4,7 +4,7 @@ This checklist tracks services that are deployed in the homelab but are not
 currently integrated with Authentik.
 
 Already integrated: Argo CD, Grafana, Homepage, Immich, Linkding, Mealie,
-Paperless-ngx, pgAdmin, and Planka.
+Paperless-ngx, pgAdmin, and Kaneo.
 
 ## Shared preparation
 

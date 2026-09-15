@@ -8,7 +8,7 @@ Managed by default:
 - Paperless-ngx: OIDC provider and application for `https://akten.mauzlab.de`.
 - Immich: OIDC provider and application for `https://fotos.mauzlab.de`.
 - Argo CD: OIDC provider and application for `https://argocd.mauzlab.de`.
-- Planka: OIDC provider and application for `https://todo.mauzlab.de`.
+- Kaneo: custom OIDC provider and application for `https://todo.mauzlab.de`.
 - Homepage: OIDC provider and application for `https://home.mauzlab.de`.
 - Linkding: OIDC provider and application for `https://links.mauzlab.de`.
 - pgAdmin: OIDC provider and application for `https://pgadmin.mauzlab.de`.
@@ -66,37 +66,33 @@ client secret should still stay out of `immich-values.yaml`; values committed to
 Git are plaintext Helm inputs. Use a SealedSecret-backed `existingConfiguration`
 instead.
 
-Planka expects the Authentik provider to allow `https://todo.mauzlab.de/oidc-callback`.
-The Helm values in `kubernetes/apps/planka/planka-values.yaml` stage:
+Kaneo expects the Authentik provider to allow
+`https://todo.mauzlab.de/api/auth/oauth2/callback/custom`. The Helm values in
+`kubernetes/apps/kaneo/kaneo-values.yaml` use Authentik's authorization, token,
+userinfo, logout, and discovery endpoints and request `openid profile email`.
+Password registration, guest access, and the local login form are disabled so
+interactive access goes through Authentik. Authentik policy bindings restrict
+the application to `homelab-users` and `homelab-admins`.
 
-- Issuer URL: `terraform output -raw planka_oidc_issuer_url`
-- Client ID: `terraform output -raw planka_oauth_client_id`
-- Client secret: `terraform output -raw planka_oauth_client_secret`
-- Scope: `openid profile email`
-- Admin role: `homelab-admins`
-
-The Planka chart reads OIDC credentials from a Secret named `planka-oidc-secret`
-with keys `clientId` and `clientSecret`. Keep OIDC disabled until the sealed
-secret exists. If you set `planka_oauth_client_secret` in local
-`terraform.tfvars`, seal that same value:
+The chart reads the OAuth client ID and secret from the SealedSecret-backed
+`kaneo-oidc-secret`. If `kaneo_oauth_client_secret` is set in local
+`terraform.tfvars`, seal that same value. The application session secret and
+bundled PostgreSQL password are stored separately in `kaneo-secrets`:
 
 ```bash
 cd terraform/authentik
 terraform apply
 
 cd ../..
-kubectl create secret generic planka-oidc-secret \
-  --namespace planka \
-  --from-literal=clientId="$(terraform -chdir=terraform/authentik output -raw planka_oauth_client_id)" \
-  --from-literal=clientSecret="$(terraform -chdir=terraform/authentik output -raw planka_oauth_client_secret)" \
+kubectl create secret generic kaneo-oidc-secret \
+  --namespace kaneo \
+  --from-literal=client-id="$(terraform -chdir=terraform/authentik output -raw kaneo_oauth_client_id)" \
+  --from-literal=client-secret="$(terraform -chdir=terraform/authentik output -raw kaneo_oauth_client_secret)" \
   --dry-run=client \
   -o yaml \
   | kubeseal --controller-namespace sealed-secrets --format yaml \
-  > kubernetes/apps/planka/oidc-sealed-secrets.yaml
+  > kubernetes/apps/kaneo/oidc-sealed-secrets.yaml
 ```
-
-Then set `oidc.enabled: true` in `kubernetes/apps/planka/planka-values.yaml`
-and add `oidc-sealed-secrets.yaml` to `kubernetes/apps/planka/kustomization.yaml`.
 
 Homepage expects the Authentik provider to allow
 `https://home.mauzlab.de/api/auth/callback/homepage-oidc`. Its deployment reads

@@ -17,6 +17,6 @@ authentik_token = "your-authentik-api-token"
 # Leave unset to let Authentik generate its secret.
 # argocd_oauth_client_secret = "existing-argocd-client-secret"
 
-# Optional: set this when importing an existing Planka OAuth provider.
+# Optional: set this when importing the existing provider as Kaneo.
 # Leave unset to let Authentik generate its secret.
-# planka_oauth_client_secret = "existing-planka-client-secret"
+# kaneo_oauth_client_secret = "existing-kaneo-client-secret"

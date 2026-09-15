@@ -40,7 +40,7 @@ Homelab infrastructure running on two Lenovo M920q nodes (Proxmox VE). The repo 
 
 - `kubernetes/bootstrap/argocd/` — Argo CD install + root ApplicationSet resources
 - `kubernetes/core/` — Cluster-wide platform services (cert-manager, CloudNativePG, MetalLB, monitoring, NFS provisioner, Sealed Secrets, Traefik)
-- `kubernetes/apps/` — Application workloads (adguard, home-assistant, homepage, hortusfox, immich, jellyfin, linkding, mealie, paperless-ngx, planka, vaultwarden)
+- `kubernetes/apps/` — Application workloads (adguard, home-assistant, homepage, hortusfox, immich, jellyfin, kaneo, linkding, mealie, paperless-ngx, vaultwarden)
 
 ## Key Conventions
 
