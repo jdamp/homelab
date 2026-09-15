@@ -11,7 +11,7 @@ development.
 
 | Secret | Key |
 | --- | --- |
-| `paseo-api-key` | `PASEO_API_KEY` |
+| `kaneo-api-key` | `KANEO_API_KEY` |
 | `telegram-bot-token` | `TELEGRAM_BOT_TOKEN` |
 
 Do not create or commit a plaintext Secret manifest when rotating these values.
