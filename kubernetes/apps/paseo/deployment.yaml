@@ -16,7 +16,9 @@ spec:
       labels:
         app: paseo
     spec:
-      automountServiceAccountToken: false
+      # Opt this workload into the token for the namespace-scoped klaus access.
+      # The ServiceAccount default remains false so other pods cannot inherit it.
+      automountServiceAccountToken: true
       serviceAccountName: paseo
       terminationGracePeriodSeconds: 60
       securityContext:

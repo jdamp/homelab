@@ -51,9 +51,17 @@ Then open the Paseo UI, enter the password, and add `/workspace/homelab` as a
 project. Provider API keys can alternatively be supplied through an additional
 Kubernetes Secret and `secretKeyRef` environment variables.
 
-The pod intentionally receives no Kubernetes service-account token. If agents
-should operate on the cluster, mount a narrowly scoped kubeconfig or explicitly
-grant this ServiceAccount only the RBAC permissions the agents need.
+## Klaus development namespace
+
+The Paseo pod receives its `paseo` ServiceAccount token so agents can work in
+the `klaus` development namespace. The Klaus Argo CD application binds the
+namespace-scoped built-in `edit` role to this ServiceAccount. This supports
+creating and updating Deployments and other application resources without
+granting cluster-wide access or permission to manage RBAC.
+
+The ServiceAccount itself retains `automountServiceAccountToken: false` as its
+default. Only the Paseo Deployment explicitly opts into token mounting, so an
+unrelated pod cannot gain this access merely by selecting the ServiceAccount.
 
 ## Container builds
 
