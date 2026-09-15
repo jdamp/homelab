@@ -18,6 +18,8 @@ spec:
         - name: home-assistant-mcp
           image: ghcr.io/homeassistant-ai/ha-mcp:7.13.0
           env:
+            - name: ENABLE_TOOL_SEARCH
+              value: "true"
             - name: HOMEASSISTANT_URL
               value: "http://home-assistant.home-assistant.svc.cluster.local:8123"
             - name: HOMEASSISTANT_TOKEN
