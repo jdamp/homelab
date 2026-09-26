@@ -8,6 +8,7 @@ helmCharts:
     repo: oci://ghcr.io/usekaneo/charts
     version: 2.28.1
     releaseName: kaneo
+    namespace: kaneo
     valuesFile: kaneo-values.yaml
 
 resources:
