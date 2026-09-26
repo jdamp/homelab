@@ -6,7 +6,7 @@ namespace: kaneo
 helmCharts:
   - name: kaneo
     repo: oci://ghcr.io/usekaneo/charts
-    version: 2.24.0
+    version: 2.28.1
     releaseName: kaneo
     valuesFile: kaneo-values.yaml
 

@@ -26,6 +26,9 @@ kaneo:
     disableRegistration: false
     disablePasswordRegistration: true
   extraEnv:
+    # Traefik reaches Kaneo from the K3s pod network; 2.26+ trusts only loopback by default
+    - name: TRUSTED_PROXIES
+      value: "10.42.0.0/16"
     - name: DISABLE_GUEST_ACCESS
       value: "true"
     - name: DISABLE_LOGIN_FORM
