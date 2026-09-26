@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: home-assistant-mcp
-          image: ghcr.io/homeassistant-ai/ha-mcp:7.13.0
+          image: ghcr.io/homeassistant-ai/ha-mcp:8.5.0
           env:
             - name: ENABLE_TOOL_SEARCH
               value: "true"
@@ -27,6 +27,6 @@ spec:
                 secretKeyRef:
                   name: home-assistant-mcp-secret
                   key: token
-          command: ["fastmcp", "run", "fastmcp-http.json"]
+          command: ["ha-mcp-web"]
           ports:
             - containerPort: 8086
