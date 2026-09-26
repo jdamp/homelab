@@ -2,6 +2,11 @@ authentik:
   existingSecret:
     secretName: authentik-config
 
+global:
+  env:
+    - name: AUTHENTIK_WEB__BASE_URL
+      value: "https://auth.mauzlab.de"
+
 # disable builtin postgres
 postgresql:
   enabled: false
