@@ -1,7 +1,7 @@
 Install ArgoCD:
 
 ```bash
-kubectl apply -k ./argocd
+kubectl apply -k ./argocd --server-side --force-conflicts
 ```
 
 After the initial bootstrap, configure Authentik SSO manually by following

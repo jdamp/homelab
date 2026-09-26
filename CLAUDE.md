@@ -32,7 +32,7 @@ Homelab infrastructure running on two Lenovo M920q nodes (Proxmox VE). The repo 
 
 4. **Bootstrap GitOps:**
    ```bash
-   kubectl apply -k kubernetes/bootstrap/argocd
+   kubectl apply -k kubernetes/bootstrap/argocd --server-side --force-conflicts
    ```
    Argo CD installs, then syncs `core/` and `apps/` via ApplicationSets.
 
