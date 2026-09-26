@@ -21,7 +21,7 @@ spec:
           command:
             - /bin/sh
             - -c
-            - pip install --no-cache-dir psycopg2-binary==2.9.11 && mlflow server --host=0.0.0.0 --port=5000 --default-artifact-root=/mlflow/artifacts
+            - pip install --no-cache-dir psycopg2-binary==2.9.11 && mlflow db upgrade "$MLFLOW_BACKEND_STORE_URI" && mlflow server --host=0.0.0.0 --port=5000 --default-artifact-root=/mlflow/artifacts
           env:
             - name: MLFLOW_SERVER_ALLOWED_HOSTS
               value: mlflow.mauzlab.de
