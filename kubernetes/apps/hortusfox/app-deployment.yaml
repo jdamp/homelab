@@ -17,7 +17,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: hortusfox
-        image: ghcr.io/danielbrendel/hortusfox-web:latest@sha256:04fe9851ced2ab9c30431eb113a53c5088f5958b137e9587342036e01e87a8a0
+        image: ghcr.io/danielbrendel/hortusfox-web:v6.1@sha256:dfe8ad32d41b67074a8fc7ae6196926f96a63acb319199344320697b1183f992
         imagePullPolicy: IfNotPresent
         env:
         - name: APP_ADMIN_EMAIL
