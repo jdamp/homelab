@@ -4,5 +4,6 @@ kind: Kustomization
 namespace: klaus
 
 resources:
+  - mealie-configmap.yaml
   - rolebinding-paseo.yaml
   - sealed-secrets.yaml

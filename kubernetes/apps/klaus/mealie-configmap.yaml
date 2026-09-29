@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mealie-config
+  namespace: klaus
+data:
+  MEALIE_BASE_URL: https://futter.mauzlab.de
