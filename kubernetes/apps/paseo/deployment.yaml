@@ -28,7 +28,7 @@ spec:
           type: RuntimeDefault
       initContainers:
         - name: buildkit-client
-          image: moby/buildkit:v0.33.0-rootless
+          image: moby/buildkit:v0.33.1-rootless
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
@@ -42,7 +42,7 @@ spec:
               mountPath: /builder/bin
       containers:
         - name: paseo
-          image: ghcr.io/jdamp/paseo-agents:0.9.2-codex0.157.1-pi0.87.1@sha256:3dc8965d1fd6e66922b33f7a0d3fc5d0e0545fe0adf6585c76c279a2270db836
+          image: ghcr.io/jdamp/paseo-agents:0.10.3-codex0.160.0-pi1.0.0@sha256:aeeae1567dda626c38a45aab14d1fade6e53f0a4b25cf94a900c85914b3aba66
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -130,7 +130,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
         - name: buildkitd
-          image: moby/buildkit:v0.33.0-rootless
+          image: moby/buildkit:v0.33.1-rootless
           imagePullPolicy: IfNotPresent
           args:
             - --addr

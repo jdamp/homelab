@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: home-assistant-mcp
-          image: ghcr.io/homeassistant-ai/ha-mcp:8.5.0
+          image: ghcr.io/homeassistant-ai/ha-mcp:8.6.0
           env:
             - name: ENABLE_TOOL_SEARCH
               value: "true"
