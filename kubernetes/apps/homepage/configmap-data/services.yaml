@@ -70,9 +70,13 @@
         description: Links
     - Kaneo:
         href: https://todo.mauzlab.de
-        icon: kaneo.png
+        icon: https://raw.githubusercontent.com/usekaneo/kaneo/v2.30.1/apps/web/public/favicon-96x96.png
         description: Project Management
     - MLflow:
         href: https://mlflow.mauzlab.de
         icon: https://raw.githubusercontent.com/mlflow/mlflow/master/assets/logo.svg
         description: ML Experiment Tracking
+    - Paseo:
+        href: https://paseo.mauzlab.de
+        icon: mdi-console
+        description: Coding Agents
