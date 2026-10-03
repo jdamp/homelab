@@ -25,6 +25,8 @@ spec:
       - name: pgadmin_admin
         ensure: present
         login: true
+        inherit: true
+        connectionLimit: -1
         createrole: true
         createdb: true
         passwordSecret:
@@ -32,6 +34,7 @@ spec:
 
   plugins:
     - name: barman-cloud.cloudnative-pg.io
+      enabled: true
       isWALArchiver: true
       parameters:
         barmanObjectName: nas-s3-store
