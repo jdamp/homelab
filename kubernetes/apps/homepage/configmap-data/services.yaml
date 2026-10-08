@@ -80,3 +80,7 @@
         href: https://paseo.mauzlab.de
         icon: mdi-console
         description: Coding Agents
+    - Penpot:
+        href: https://design.mauzlab.de
+        icon: penpot.png
+        description: Design & Prototyping

@@ -34,4 +34,4 @@ Using Proxmox VE, multiple VMs are provisioned on these nodes to run a K3s Kuber
   - **Sealed Secrets** — Encrypted secrets safe to commit to Git.
   - **Traefik** — Ingress controller and TLS configuration.
 - `kubernetes/apps/` — Application deployments:
-  - Home Assistant, Homepage, HortusFox, Immich, Jellyfin, Linkding, Mealie, Paperless-ngx, Vaultwarden, Vikunja.
+  - Home Assistant, Homepage, HortusFox, Immich, Jellyfin, Linkding, Mealie, Paperless-ngx, Penpot, Vaultwarden, Vikunja.

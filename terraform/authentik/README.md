@@ -14,6 +14,7 @@ Managed by default:
 - pgAdmin: OIDC provider and application for `https://pgadmin.mauzlab.de`.
 - Vaultwarden: OIDC provider and application for `https://passwort.mauzlab.de`.
 - Mealie: OIDC provider and application for `https://futter.mauzlab.de`.
+- Penpot: OIDC provider and application for `https://design.mauzlab.de`.
 
 ## Usage
 

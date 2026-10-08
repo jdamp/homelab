@@ -1,0 +1,77 @@
+config:
+  publicUri: https://design.mauzlab.de
+  # Authentik controls access and provisions users on their first login.
+  flags: >-
+    enable-registration enable-login-with-oidc disable-login-with-password
+    disable-email-verification enable-mcp enable-access-tokens disable-telemetry
+  telemetryEnabled: false
+  existingSecret: penpot-secrets
+  secretKeys:
+    apiSecretKey: secret-key
+  postgresql:
+    host: postgres-shared-rw.databases.svc.cluster.local
+    database: penpot
+    existingSecret: penpot-secrets
+    secretKeys:
+      usernameKey: database-username
+      passwordKey: database-password
+  redis:
+    host: penpot-valkey
+  providers:
+    oidc:
+      enabled: true
+      baseURI: https://auth.mauzlab.de/application/o/penpot/
+      roles: ""
+      scopes: openid profile email
+    existingSecret: penpot-secrets
+    secretKeys:
+      oidcClientIDKey: oidc-client-id
+      oidcClientSecretKey: oidc-client-secret
+
+persistence:
+  assets:
+    enabled: true
+    storageClass: nfs-nas
+    size: 20Gi
+    accessModes:
+      - ReadWriteMany
+
+frontend:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  extraEnvs:
+    - name: PENPOT_OIDC_NAME
+      value: Authentik
+
+backend:
+  extraEnvs:
+    # Keep capacity available for the other apps on postgres-shared.
+    - name: PENPOT_DATABASE_MIN_POOL_SIZE
+      value: "2"
+    - name: PENPOT_DATABASE_MAX_POOL_SIZE
+      value: "10"
+    # Authentik resolves to the private Traefik address. Allow only this host
+    # through Penpot's SSRF protection for OIDC discovery and token exchange.
+    - name: PENPOT_SSRF_ALLOWED_HOSTS
+      value: auth.mauzlab.de
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1Gi
+
+exporter:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+
+mcp:
+  replicaCount: 1
+  # The official image starts in multi-user mode. Penpot provides /mcp/stream
+  # and /mcp/ws through its frontend; do not expose an unauthenticated server.
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi

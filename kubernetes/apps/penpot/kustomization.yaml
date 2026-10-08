@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: penpot
+
+helmCharts:
+  - name: penpot
+    repo: https://helm.penpot.app
+    version: 1.11.3
+    releaseName: penpot
+    namespace: penpot
+    valuesFile: values.yaml
+
+resources:
+  - sealed-secrets.yaml
+  - valkey.yaml
+  - ingress.yaml
+
+patches:
+  # Helm's test pod is for `helm test`; it is not a GitOps workload.
+  - patch: |-
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        name: penpot-test-connection
+        namespace: penpot
+      $patch: delete

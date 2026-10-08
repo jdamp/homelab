@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: penpot-valkey
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: penpot-valkey
+  template:
+    metadata:
+      labels:
+        app: penpot-valkey
+    spec:
+      containers:
+        - name: valkey
+          image: valkey/valkey:8.1.4
+          # Transient notifications and MCP routing; no persistent cache needed.
+          args: ["--save", "", "--appendonly", "no", "--maxmemory", "128mb", "--maxmemory-policy", "noeviction"]
+          ports:
+            - name: redis
+              containerPort: 6379
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          readinessProbe:
+            exec:
+              command: ["valkey-cli", "ping"]
+          livenessProbe:
+            exec:
+              command: ["valkey-cli", "ping"]
+            initialDelaySeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: penpot-valkey
+spec:
+  selector:
+    app: penpot-valkey
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: redis
