@@ -5,6 +5,5 @@ namespace: klaus
 
 resources:
   - mealie-configmap.yaml
-  - postgres/cluster.yaml
   - rolebinding-paseo.yaml
   - sealed-secrets.yaml

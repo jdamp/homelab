@@ -131,11 +131,37 @@ The Paseo ServiceAccount token is mounted for the workload. Its Kubernetes
 resource permissions come from the Klaus Argo CD application's RoleBinding,
 which grants the built-in `edit` role only in the `klaus` namespace. It can
 create and update application resources there, but has no RoleBinding in the
-`paseo` namespace and no cluster-wide role binding. The `edit` role does not
-grant permission to manage RBAC.
+`paseo` namespace for general application management and no cluster-wide role
+binding. The `edit` role does not grant permission to manage RBAC.
 
-Agents also have access to [development Postgres](../klaus/README.md#development-postgres)
-in `klaus`.
+## Development Postgres
+
+The Paseo application manages `postgres-dev` in the `paseo` namespace. It runs
+PostgreSQL 18 via CloudNativePG: one instance, 2 GiB local storage, 100m CPU /
+256 MiB RAM requested. No backups or replicas; data is disposable. The shared
+`dev` user can create a database per project.
+
+Inside a Paseo agent shell:
+
+```sh
+export DATABASE_URL="$(kubectl --namespace paseo get secret postgres-dev-app \
+  -o jsonpath='{.data.fqdn-uri}' | base64 --decode)"
+psql "$DATABASE_URL"
+```
+
+This connects to the `dev` database at
+`postgres-dev-rw.paseo.svc.cluster.local:5432`. A namespace-scoped Role lets
+Paseo's ServiceAccount read only the `postgres-dev-app` Secret in `paseo`.
+Deployments in `paseo` can use its `fqdn-uri` key via `secretKeyRef`.
+Deployments in other namespaces need their own credential Secret.
+
+### Moving from Klaus
+
+The old `klaus/postgres-dev` database is disposable and needs no data migration.
+The manifest now belongs to `paseo`; commit and push this move before syncing
+either application so Argo CD does not recreate the old database from Git.
+Sync `paseo` to provision a fresh cluster and credentials, and sync `klaus`
+with pruning to remove any remaining resources from the old deployment.
 
 ## Container builds
 

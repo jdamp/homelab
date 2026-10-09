@@ -15,6 +15,8 @@ resources:
   - sealed-secrets.yaml
   - github-sealed-secrets.yaml
   - serviceaccount.yaml
+  - postgres/cluster.yaml
+  - postgres/credentials-rbac.yaml
   - pvc-home.yaml
   - pvc-workspace.yaml
   - deployment.yaml

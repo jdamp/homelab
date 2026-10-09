@@ -7,20 +7,10 @@ development.
 
 ## Development Postgres
 
-`postgres-dev` runs PostgreSQL 18 via CloudNativePG: one instance, 2 GiB local
-storage, 100m CPU / 256 MiB RAM requested. No backups or replicas; data is
-disposable. The shared `dev` user can create a database per project.
-
-Inside a Paseo agent shell:
-
-```sh
-export DATABASE_URL="$(kubectl --namespace klaus get secret postgres-dev-app \
-  -o jsonpath='{.data.fqdn-uri}' | base64 --decode)"
-```
-
-This connects to the `dev` database at
-`postgres-dev-rw.klaus.svc.cluster.local:5432`. Deployments in `klaus` can use
-the same Secret's `fqdn-uri` key via `secretKeyRef`.
+Development Postgres is managed by the [Paseo application](../paseo/README.md#development-postgres)
+in the `paseo` namespace. Applications in `klaus` can connect to its service,
+but need a credential Secret in `klaus`; `secretKeyRef` cannot read across
+namespaces.
 
 ## API-key SealedSecrets
 
