@@ -5,6 +5,23 @@ creates the `klaus` namespace through its `CreateNamespace=true` sync option.
 The application also grants Paseo namespace-scoped `edit` access for early
 development.
 
+## Development Postgres
+
+`postgres-dev` runs PostgreSQL 18 via CloudNativePG: one instance, 2 GiB local
+storage, 100m CPU / 256 MiB RAM requested. No backups or replicas; data is
+disposable. The shared `dev` user can create a database per project.
+
+Inside a Paseo agent shell:
+
+```sh
+export DATABASE_URL="$(kubectl --namespace klaus get secret postgres-dev-app \
+  -o jsonpath='{.data.fqdn-uri}' | base64 --decode)"
+```
+
+This connects to the `dev` database at
+`postgres-dev-rw.klaus.svc.cluster.local:5432`. Deployments in `klaus` can use
+the same Secret's `fqdn-uri` key via `secretKeyRef`.
+
 ## API-key SealedSecrets
 
 `sealed-secrets.yaml` is used to manage these Secrets:

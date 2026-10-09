@@ -1,0 +1,43 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-dev
+spec:
+  # Disposable development data: one instance, no replicas or backup archive.
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:18@sha256:899d3ed526b659d77935dde0e6bf2d69dbbf17d3d8c6486ca8cfd04bd3c18533
+
+  storage:
+    size: 2Gi
+    storageClass: local-path
+
+  bootstrap:
+    initdb:
+      database: dev
+      owner: dev
+      # CNPG generates postgres-dev-app; no plaintext credentials in Git.
+
+  managed:
+    roles:
+      - name: dev
+        ensure: present
+        login: true
+        createdb: true
+        superuser: false
+        createrole: false
+
+  postgresql:
+    parameters:
+      shared_buffers: "64MB"
+      work_mem: "4MB"
+      maintenance_work_mem: "32MB"
+      max_connections: "30"
+      max_wal_size: "256MB"
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "1"
+      memory: "512Mi"

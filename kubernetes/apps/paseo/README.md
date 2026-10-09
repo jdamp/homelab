@@ -63,6 +63,9 @@ The ServiceAccount itself retains `automountServiceAccountToken: false` as its
 default. Only the Paseo Deployment explicitly opts into token mounting, so an
 unrelated pod cannot gain this access merely by selecting the ServiceAccount.
 
+Agents also have access to [development Postgres](../klaus/README.md#development-postgres)
+in `klaus`.
+
 ## Container builds
 
 Paseo includes a rootless BuildKit sidecar. The `buildctl` client is available
