@@ -16,9 +16,6 @@ spec:
       labels:
         app: paseo
     spec:
-      # Opt this workload into the token for the namespace-scoped klaus access.
-      # The ServiceAccount default remains false so other pods cannot inherit it.
-      automountServiceAccountToken: true
       serviceAccountName: paseo
       terminationGracePeriodSeconds: 60
       securityContext:
@@ -27,19 +24,26 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       initContainers:
-        - name: buildkit-client
+        - name: prepare-agent-tools
           image: moby/buildkit:v0.33.1-rootless
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
             - -ec
-            - cp /usr/bin/buildctl /builder/bin/buildctl
+            - |
+              cp /usr/bin/buildctl /builder/bin/buildctl
+              # Create writable config directories on a fresh home PVC before
+              # mounting the read-only instruction files in the main container.
+              mkdir -p /home/paseo/.codex /home/paseo/.pi/agent
+              chown 1000:1000 /home/paseo/.codex /home/paseo/.pi /home/paseo/.pi/agent
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
           volumeMounts:
             - name: builder-bin
               mountPath: /builder/bin
+            - name: home
+              mountPath: /home/paseo
       containers:
         - name: paseo
           image: ghcr.io/jdamp/paseo-agents:0.10.3-codex0.160.0-pi1.0.0@sha256:aeeae1567dda626c38a45aab14d1fade6e53f0a4b25cf94a900c85914b3aba66
@@ -98,6 +102,21 @@ spec:
               mountPath: /home/paseo
             - name: workspace
               mountPath: /workspace
+            # Mount the same source file at each agent's global instruction path.
+            # Kustomize's ConfigMap hash triggers a rollout when it changes;
+            # subPath mounts do not receive live ConfigMap updates.
+            - name: agent-instructions
+              mountPath: /home/paseo/.codex/AGENTS.md
+              subPath: AGENTS.md
+              readOnly: true
+            - name: agent-instructions
+              mountPath: /home/paseo/.pi/agent/AGENTS.md
+              subPath: AGENTS.md
+              readOnly: true
+            - name: shell-profile
+              mountPath: /etc/profile.d/paseo-path.sh
+              subPath: paseo-path.sh
+              readOnly: true
             - name: buildkit-socket
               mountPath: /run/user/1000/buildkit
             - name: builder-bin
@@ -156,6 +175,12 @@ spec:
         - name: workspace
           persistentVolumeClaim:
             claimName: paseo-workspace
+        - name: agent-instructions
+          configMap:
+            name: paseo-agent-instructions
+        - name: shell-profile
+          configMap:
+            name: paseo-shell-profile
         - name: buildkit-socket
           emptyDir: {}
         - name: builder-bin

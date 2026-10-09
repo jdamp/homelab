@@ -3,6 +3,14 @@ kind: Kustomization
 
 namespace: paseo
 
+configMapGenerator:
+  - name: paseo-agent-instructions
+    files:
+      - AGENTS.md=agent-instructions/AGENTS.md
+  - name: paseo-shell-profile
+    files:
+      - paseo-path.sh=profile.d/paseo-path.sh
+
 resources:
   - sealed-secrets.yaml
   - github-sealed-secrets.yaml
