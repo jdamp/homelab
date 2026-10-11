@@ -46,7 +46,7 @@ spec:
               mountPath: /home/paseo
       containers:
         - name: paseo
-          image: ghcr.io/jdamp/paseo-agents:0.10.3-codex0.160.0-pi1.0.0@sha256:aeeae1567dda626c38a45aab14d1fade6e53f0a4b25cf94a900c85914b3aba66
+          image: ghcr.io/jdamp/paseo-agents:0.11.2-codex0.162.0-pi1.1.0@sha256:b082d2c54e69f2c2c581c2cdc955f4b5858eb9bfb81cff2f67ecd423613f4399
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
