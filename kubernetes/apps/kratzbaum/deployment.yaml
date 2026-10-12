@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kratzbaum
+  labels:
+    app: kratzbaum
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: kratzbaum
+  template:
+    metadata:
+      labels:
+        app: kratzbaum
+    spec:
+      automountServiceAccountToken: false
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: kratzbaum
+          image: ghcr.io/jdamp/kratzbaum:0.1.7
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: LISTEN_ADDR
+              value: :8080
+            - name: DATABASE_DRIVER
+              value: sqlite
+            - name: DATABASE_URL
+              value: /data/kratzbaum.db
+            - name: DATA_DIR
+              value: /data
+            - name: MEDIA_DIR
+              value: /data/media
+            - name: APP_TIMEZONE
+              value: Europe/Berlin
+            - name: AUTH_MODE
+              value: oidc
+            - name: OIDC_ISSUER
+              value: https://auth.mauzlab.de/application/o/kratzbaum/
+            - name: OIDC_REDIRECT_URL
+              value: https://kratzbaum.mauzlab.de/auth/callback
+            - name: OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: kratzbaum-oidc
+                  key: client-id
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: kratzbaum-oidc
+                  key: client-secret
+            - name: HEIF_CONVERT
+              value: heif-convert
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 1Gi
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: kratzbaum-data

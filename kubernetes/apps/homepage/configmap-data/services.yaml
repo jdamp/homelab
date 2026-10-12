@@ -52,9 +52,9 @@
         href: https://futter.mauzlab.de
         icon: mealie.png
         description: Recipe Manager
-    - HortusFox:
+    - Kratzbaum:
         href: https://kratzbaum.mauzlab.de
-        icon: hortusfox.png
+        icon: mdi-flower
         description: Plant Management
     - Jellyfin:
         href: https://kino.mauzlab.de

@@ -10,6 +10,8 @@ spec:
         revision: HEAD
         directories:
           - path: kubernetes/apps/*
+          - path: kubernetes/apps/hortusfox
+            exclude: true
 
   template:
     metadata:

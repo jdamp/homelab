@@ -110,29 +110,16 @@ Integration type: native OIDC with a separate vault master password.
 - [x] Retain email/master-password login by keeping `SSO_ONLY=false`.
 - [ ] Test the retained email/master-password login after SSO account linking.
 
-## Priority 5: HortusFox
+## Priority 5: Kratzbaum
 
-Integration type: Authentik forward auth with trusted identity headers.
+Integration type: native OIDC.
 
-- [ ] Create an Authentik proxy provider and application for HortusFox.
-- [ ] Use single-application forward-auth mode with external host
-      `https://kratzbaum.mauzlab.de`.
-- [ ] Assign the proxy application to the embedded or a managed Authentik
-      outpost.
-- [ ] Create a Traefik `Middleware` that calls the Authentik outpost and copies
-      the `X-authentik-*` response headers.
-- [ ] Attach the middleware to the HortusFox `IngressRoute`.
-- [ ] Route `/outpost.goauthentik.io/` to the Authentik outpost without applying
-      the forward-auth middleware to that path.
-- [ ] Set `PROXY_ENABLE=true`.
-- [ ] Set `PROXY_HEADER_EMAIL=X-authentik-email` and
-      `PROXY_HEADER_USERNAME=X-authentik-username`.
-- [ ] Set and review `PROXY_AUTO_SIGNUP`, `PROXY_HIDE_LOGOUT`, and
-      `PROXY_OVERWRITE_VALUES` behavior.
-- [ ] Ensure HortusFox cannot be reached through a path that bypasses Traefik,
-      preventing clients from spoofing trusted identity headers.
-- [ ] Verify user creation, administrator assignment, logout, and removal of
-      Authentik access.
+- [x] Preserve the exact OIDC issuer, including its trailing slash, in Kratzbaum (image `0.1.6`).
+- [x] Create an Authentik OAuth provider restricted to homelab users and admins.
+- [x] Configure `https://kratzbaum.mauzlab.de/auth/callback` as the strict callback.
+- [x] Store client credentials in a SealedSecret and enable `AUTH_MODE=oidc`.
+- [x] Verify OIDC startup, the Authentik login redirect with S256 PKCE, and anonymous API rejection.
+- [ ] Verify login, logout, and access to the shared collection.
 
 ## Optional community integrations
 

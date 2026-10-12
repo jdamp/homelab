@@ -15,6 +15,7 @@ Managed by default:
 - Vaultwarden: OIDC provider and application for `https://passwort.mauzlab.de`.
 - Mealie: OIDC provider and application for `https://futter.mauzlab.de`.
 - Penpot: OIDC provider and application for `https://design.mauzlab.de`.
+- Kratzbaum: OIDC provider and application for `https://kratzbaum.mauzlab.de`.
 
 ## Usage
 
@@ -160,6 +161,14 @@ not perform mailbox verification. Revisit it before allowing either capability.
 
 Apply the Authentik Terraform change and start a fresh Mealie login to obtain the
 updated claim. No Mealie restart or client-secret change is required.
+
+## Kratzbaum
+
+Kratzbaum uses the exact issuer `https://auth.mauzlab.de/application/o/kratzbaum/`
+and callback `https://kratzbaum.mauzlab.de/auth/callback`. Its provider is restricted
+to `homelab-users` and `homelab-admins`. After applying Terraform, run
+`./kubernetes/apps/kratzbaum/create-oidc-sealed-secret.sh` from the repository root
+to refresh its credentials, then sync the Kratzbaum application.
 
 ## Adding OAuth Apps
 
