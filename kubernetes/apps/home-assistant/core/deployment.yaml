@@ -6,6 +6,9 @@ metadata:
     app: home-assistant
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
+    rollingUpdate: null
   selector:
     matchLabels:
       app: home-assistant
@@ -16,7 +19,7 @@ spec:
     spec:
       containers:
         - name: home-assistant
-          image: "ghcr.io/home-assistant/home-assistant:2026.9.4"
+          image: "ghcr.io/home-assistant/home-assistant:2026.10.2"
           ports:
             - containerPort: 8123
           volumeMounts:

@@ -1,8 +1,16 @@
 victoria-metrics-k8s-stack:
+  # Retain the existing recording rules across the chart's new default.
+  defaultRules:
+    groups:
+      kube-prometheus-general.rules:
+        enabled: true
   grafana:
     enabled: true
     image:
       tag: 13.2.4-distroless
+    sidecar:
+      image:
+        tag: 2.14.1
     envFromSecret: grafana-oauth-secret
     grafana.ini:
       server:

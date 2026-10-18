@@ -13,6 +13,8 @@ resources:
 images:
   - name: public.ecr.aws/docker/library/redis
     newTag: 8.2.10-alpine
+  - name: ghcr.io/dexidp/dex
+    newTag: v2.46.0
 
 # This patch adds the "--insecure" flag to the argocd-server deployment
 # see https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#traefik-v30
