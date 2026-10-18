@@ -8,7 +8,7 @@ controllers:
       main:
         image:
           # Immich app version is pinned here because the Helm chart version can lag behind app releases.
-          tag: v3.2.4
+          tag: v3.3.3
 
 immich:
   metrics:

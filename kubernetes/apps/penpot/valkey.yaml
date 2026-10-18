@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: valkey
-          image: valkey/valkey:8.1.4
+          image: valkey/valkey:8.1.10
           # Transient notifications and MCP routing; no persistent cache needed.
           args: ["--save", "", "--appendonly", "no", "--maxmemory", "128mb", "--maxmemory-policy", "noeviction"]
           ports:

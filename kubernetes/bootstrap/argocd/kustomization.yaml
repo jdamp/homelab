@@ -4,10 +4,15 @@ kind: Kustomization
 namespace: argocd
 resources:
 - namespace.yaml
-- https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.3/manifests/install.yaml
+- https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.5/manifests/install.yaml
 - applicationset-core.yaml
 - applicationset-apps.yaml
 - ingress.yaml
+
+# Stay on the bundled Redis minor while applying its security patches.
+images:
+  - name: public.ecr.aws/docker/library/redis
+    newTag: 8.2.10-alpine
 
 # This patch adds the "--insecure" flag to the argocd-server deployment
 # see https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#traefik-v30

@@ -25,7 +25,7 @@ spec:
           type: RuntimeDefault
       initContainers:
         - name: prepare-agent-tools
-          image: moby/buildkit:v0.33.1-rootless
+          image: moby/buildkit:v0.34.0-rootless
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
@@ -46,7 +46,7 @@ spec:
               mountPath: /home/paseo
       containers:
         - name: paseo
-          image: ghcr.io/jdamp/paseo-agents:0.11.2-codex0.162.0-pi1.1.0@sha256:b082d2c54e69f2c2c581c2cdc955f4b5858eb9bfb81cff2f67ecd423613f4399
+          image: ghcr.io/jdamp/paseo-agents:0.11.2-codex0.162.1-pi1.1.0@sha256:b7bb6cb169dc09c1b253ede7b9909558cbc7f4530e4ce4b92ac2230002085623
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -149,7 +149,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
         - name: buildkitd
-          image: moby/buildkit:v0.33.1-rootless
+          image: moby/buildkit:v0.34.0-rootless
           imagePullPolicy: IfNotPresent
           args:
             - --addr

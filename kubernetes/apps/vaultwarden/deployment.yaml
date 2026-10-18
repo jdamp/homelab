@@ -6,6 +6,10 @@ metadata:
     app: vaultwarden
 spec:
   replicas: 1
+  # Startup applies database migrations; run one app version at a time.
+  strategy:
+    type: Recreate
+    rollingUpdate: null
   selector:
     matchLabels:
       app: vaultwarden
@@ -17,7 +21,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: vaultwarden
-        image: vaultwarden/server:1.37.3-alpine
+        image: vaultwarden/server:1.37.4-alpine
         imagePullPolicy: IfNotPresent
         env:
         - name: DOMAIN
