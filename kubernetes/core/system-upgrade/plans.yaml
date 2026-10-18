@@ -1,0 +1,44 @@
+apiVersion: upgrade.cattle.io/v1
+kind: Plan
+metadata:
+  name: k3s-server
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  concurrency: 1
+  cordon: true
+  version: v1.36.5+k3s1
+  serviceAccountName: system-upgrade
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+  tolerations:
+    - operator: Exists
+  upgrade:
+    image: rancher/k3s-upgrade
+---
+apiVersion: upgrade.cattle.io/v1
+kind: Plan
+metadata:
+  name: k3s-agent
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  concurrency: 1
+  cordon: true
+  version: v1.36.5+k3s1
+  serviceAccountName: system-upgrade
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
+  tolerations:
+    - operator: Exists
+  prepare:
+    image: rancher/k3s-upgrade
+    args:
+      - prepare
+      - k3s-server
+  upgrade:
+    image: rancher/k3s-upgrade
