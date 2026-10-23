@@ -1,0 +1,203 @@
+diff --git a/kubernetes/bootstrap/argocd/kustomization.yaml b/kubernetes/bootstrap/argocd/kustomization.yaml
+index 19c3bdf..07bf3ff 100644
+--- a/kubernetes/bootstrap/argocd/kustomization.yaml
++++ b/kubernetes/bootstrap/argocd/kustomization.yaml
+@@ -4,7 +4,7 @@ kind: Kustomization
+ namespace: argocd
+ resources:
+ - namespace.yaml
+-- https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.5/manifests/install.yaml
++- https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.6/manifests/install.yaml
+ - applicationset-core.yaml
+ - applicationset-apps.yaml
+ - ingress.yaml
+@@ -14,7 +14,7 @@ images:
+   - name: public.ecr.aws/docker/library/redis
+     newTag: 8.2.10-alpine
+   - name: ghcr.io/dexidp/dex
+-    newTag: v2.46.0
++    newTag: v2.46.1
+ 
+ # This patch adds the "--insecure" flag to the argocd-server deployment
+ # see https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#traefik-v30
+diff --git a/kubernetes/core/authentik/kustomization.yaml b/kubernetes/core/authentik/kustomization.yaml
+index ebb0776..25820e4 100644
+--- a/kubernetes/core/authentik/kustomization.yaml
++++ b/kubernetes/core/authentik/kustomization.yaml
+@@ -6,7 +6,7 @@ namespace: authentik
+ helmCharts:
+   - name: authentik
+     repo: https://charts.goauthentik.io
+-    version: 2026.8.4
++    version: 2026.8.5
+     releaseName: authentik
+     namespace: authentik
+     valuesFile: values.yaml
+diff --git a/kubernetes/core/traefik/helmchartconfig.yaml b/kubernetes/core/traefik/helmchartconfig.yaml
+index 885a898..3fcb937 100644
+--- a/kubernetes/core/traefik/helmchartconfig.yaml
++++ b/kubernetes/core/traefik/helmchartconfig.yaml
+@@ -5,4 +5,4 @@ metadata:
+ spec:
+   valuesContent: |-
+     image:
+-      tag: 3.7.15
++      tag: 3.7.16
+diff --git a/kubernetes/core/monitoring/values.yaml b/kubernetes/core/monitoring/values.yaml
+index 0a0c508..62ce147 100644
+--- a/kubernetes/core/monitoring/values.yaml
++++ b/kubernetes/core/monitoring/values.yaml
+@@ -45,7 +45,7 @@ victoria-metrics-k8s-stack:
+     enabled: true
+     spec:
+       image:
+-        tag: v1.154.0
++        tag: v1.154.1
+       retentionPeriod: "30d"
+       resources:
+         limits:
+@@ -68,8 +68,8 @@ victoria-metrics-k8s-stack:
+   vmagent:
+     spec:
+       image:
+-        tag: v1.154.0
++        tag: v1.154.1
+   vmalert:
+     spec:
+       image:
+-        tag: v1.154.0
++        tag: v1.154.1
+diff --git a/kubernetes/apps/immich/immich-values.yaml b/kubernetes/apps/immich/immich-values.yaml
+index b51264c..5337639 100644
+--- a/kubernetes/apps/immich/immich-values.yaml
++++ b/kubernetes/apps/immich/immich-values.yaml
+@@ -8,7 +8,7 @@ controllers:
+       main:
+         image:
+           # Immich app version is pinned here because the Helm chart version can lag behind app releases.
+-          tag: v3.3.3
++          tag: v3.3.5
+ 
+ immich:
+   metrics:
+diff --git a/kubernetes/apps/paperless-ngx/paperless/deployment.yaml b/kubernetes/apps/paperless-ngx/paperless/deployment.yaml
+index bb029a0..a846819 100644
+--- a/kubernetes/apps/paperless-ngx/paperless/deployment.yaml
++++ b/kubernetes/apps/paperless-ngx/paperless/deployment.yaml
+@@ -16,7 +16,7 @@ spec:
+     spec:
+       containers:
+         - name: paperless-ngx
+-          image: ghcr.io/paperless-ngx/paperless-ngx:3.3.2
++          image: ghcr.io/paperless-ngx/paperless-ngx:3.3.4
+           ports:
+             - containerPort: 8000
+               name: http
+diff --git a/kubernetes/apps/paperless-ngx/redis/deployment.yaml b/kubernetes/apps/paperless-ngx/redis/deployment.yaml
+index e40064f..b9738e1 100644
+--- a/kubernetes/apps/paperless-ngx/redis/deployment.yaml
++++ b/kubernetes/apps/paperless-ngx/redis/deployment.yaml
+@@ -16,7 +16,7 @@ spec:
+     spec:
+       containers:
+         - name: redis
+-          image: docker.io/library/redis:8.10@sha256:718f745deb7dfefeac6eed7041fc7ec9476b50e61b247932682457c41adafa0e
++          image: docker.io/library/redis:8.10@sha256:97ec88159e6d7cfb5ddef9015386087d58a912de80112f06ebdfa78fa5989901
+           ports:
+             - containerPort: 6379
+               name: redis
+diff --git a/kubernetes/apps/uptime-kuma/deployment.yaml b/kubernetes/apps/uptime-kuma/deployment.yaml
+index daee28c..f5c3cb0 100644
+--- a/kubernetes/apps/uptime-kuma/deployment.yaml
++++ b/kubernetes/apps/uptime-kuma/deployment.yaml
+@@ -18,7 +18,7 @@ spec:
+     spec:
+       containers:
+         - name: uptime-kuma
+-          image: louislam/uptime-kuma:2.5.6
++          image: louislam/uptime-kuma:2.5.7
+           ports:
+             - name: http
+               containerPort: 3001
+diff --git a/kubernetes/apps/mlflow/deployment.yaml b/kubernetes/apps/mlflow/deployment.yaml
+index 8870b66..4bd95f8 100644
+--- a/kubernetes/apps/mlflow/deployment.yaml
++++ b/kubernetes/apps/mlflow/deployment.yaml
+@@ -20,7 +20,7 @@ spec:
+     spec:
+       containers:
+         - name: mlflow
+-          image: ghcr.io/mlflow/mlflow:v3.17.1
++          image: ghcr.io/mlflow/mlflow:v3.17.2
+           command:
+             - /bin/sh
+             - -c
+diff --git a/kubernetes/apps/paseo/deployment.yaml b/kubernetes/apps/paseo/deployment.yaml
+index a3c9927..0aead5b 100644
+--- a/kubernetes/apps/paseo/deployment.yaml
++++ b/kubernetes/apps/paseo/deployment.yaml
+@@ -25,7 +25,7 @@ spec:
+           type: RuntimeDefault
+       initContainers:
+         - name: prepare-agent-tools
+-          image: moby/buildkit:v0.34.0-rootless
++          image: moby/buildkit:v0.34.1-rootless
+           imagePullPolicy: IfNotPresent
+           command:
+             - /bin/sh
+@@ -149,7 +149,7 @@ spec:
+           securityContext:
+             allowPrivilegeEscalation: false
+         - name: buildkitd
+-          image: moby/buildkit:v0.34.0-rootless
++          image: moby/buildkit:v0.34.1-rootless
+           imagePullPolicy: IfNotPresent
+           args:
+             - --addr
+diff --git a/kubernetes/apps/penpot/kustomization.yaml b/kubernetes/apps/penpot/kustomization.yaml
+index 324c32e..9979ef1 100644
+--- a/kubernetes/apps/penpot/kustomization.yaml
++++ b/kubernetes/apps/penpot/kustomization.yaml
+@@ -5,7 +5,7 @@ namespace: penpot
+ helmCharts:
+   - name: penpot
+     repo: https://helm.penpot.app
+-    version: 1.11.3
++    version: 1.11.4
+     releaseName: penpot
+     namespace: penpot
+     valuesFile: values.yaml
+diff --git a/kubernetes/apps/jellyfin/Chart.yaml b/kubernetes/apps/jellyfin/Chart.yaml
+index 3923bc3..a4933c0 100644
+--- a/kubernetes/apps/jellyfin/Chart.yaml
++++ b/kubernetes/apps/jellyfin/Chart.yaml
+@@ -6,5 +6,5 @@ version: 1.0.0
+ appVersion: "1.0.0"
+ dependencies:
+   - name: jellyfin
+-    version: 3.2.0
++    version: 3.6.0
+     repository: https://jellyfin.github.io/jellyfin-helm
+\ No newline at end of file
+diff --git a/kubernetes/apps/jellyfin/values.yaml b/kubernetes/apps/jellyfin/values.yaml
+index 7cdcf37..6e69941 100644
+--- a/kubernetes/apps/jellyfin/values.yaml
++++ b/kubernetes/apps/jellyfin/values.yaml
+@@ -30,6 +30,8 @@ jellyfin:
+       existingClaim: jellyfin-config-local
+ 
+     media:
++      # Preserve the existing writable media mount across the chart upgrade.
++      readOnly: false
+       enabled: true
+       type: pvc
+       accessMode: ReadWriteOnce
+@@ -44,7 +46,7 @@ jellyfin:
+       storageClass: local-path
+ 
+   image:
+-    tag: "12.2"
++    tag: "12.3"
+ 
+   resources:
+     requests:
