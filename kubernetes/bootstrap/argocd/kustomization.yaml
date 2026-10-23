@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: argocd
 resources:
 - namespace.yaml
-- https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.5/manifests/install.yaml
+- https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.6/manifests/install.yaml
 - applicationset-core.yaml
 - applicationset-apps.yaml
 - ingress.yaml
@@ -14,7 +14,7 @@ images:
   - name: public.ecr.aws/docker/library/redis
     newTag: 8.2.10-alpine
   - name: ghcr.io/dexidp/dex
-    newTag: v2.46.0
+    newTag: v2.46.1
 
 # This patch adds the "--insecure" flag to the argocd-server deployment
 # see https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#traefik-v30
