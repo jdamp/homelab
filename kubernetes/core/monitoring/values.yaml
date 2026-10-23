@@ -45,7 +45,7 @@ victoria-metrics-k8s-stack:
     enabled: true
     spec:
       image:
-        tag: v1.154.0
+        tag: v1.154.1
       retentionPeriod: "30d"
       resources:
         limits:
@@ -68,8 +68,8 @@ victoria-metrics-k8s-stack:
   vmagent:
     spec:
       image:
-        tag: v1.154.0
+        tag: v1.154.1
   vmalert:
     spec:
       image:
-        tag: v1.154.0
+        tag: v1.154.1
