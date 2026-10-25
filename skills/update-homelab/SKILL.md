@@ -65,6 +65,8 @@ Ask for approval of the concrete plan once it is reviewable. The approval requir
 
 Carry out approved backup actions first. Check completed backups and application-specific persistent assets; PostgreSQL backups do not cover media libraries, uploaded documents, or SQLite PVCs. Preserve `Recreate`/single-writer behavior where configured. Never perform a PostgreSQL major upgrade by merely replacing an image tag.
 
+For Uptime Kuma, inspect the database type in `/app/data/db-config.json` without printing credentials before choosing integrity checks; this deployment can use embedded MariaDB. A full backup of the stopped data PVC covers its embedded database and uploaded assets.
+
 Change the Git source of truth and publish/sync only the approved wave. A single push containing several core changes can start all of them simultaneously; use separate commits/pushes when sequencing matters. Wait for each critical platform component to recover before dependent changes. Avoid changing desired sync policy merely to perform maintenance.
 
 At wave boundaries, record published revisions, completed rollouts, backup identifiers/locations, and remaining work in the repository report. Temporary files can disappear after a restart. On resume, audit Git, live images, active operations, and current health before continuing the already-approved targets; refresh backups when the interruption warrants it.

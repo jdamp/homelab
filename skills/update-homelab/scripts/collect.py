@@ -49,11 +49,16 @@ def live_summary():
         containers = []
         for kind in ("initContainerStatuses", "containerStatuses"):
             for c in status.get(kind, []):
-                containers.append({k: c.get(k) for k in
-                                   ("name", "image", "imageID", "ready", "restartCount")})
+                containers.append({
+                    "container_type": "init" if kind == "initContainerStatuses" else "regular",
+                    **{k: c.get(k) for k in ("name", "image", "imageID", "ready", "restartCount")},
+                })
         out["pods"].append({
             "namespace": pod["metadata"]["namespace"], "name": pod["metadata"]["name"],
-            "phase": status.get("phase"), "containers": containers,
+            "phase": status.get("phase"),
+            "pod_ready": any(c.get("type") == "Ready" and c.get("status") == "True"
+                             for c in status.get("conditions", [])),
+            "containers": containers,
         })
     return out
 
