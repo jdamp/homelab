@@ -40,7 +40,7 @@ For floating tags or digest pins, compare registry manifests and runtime image I
 
 ## 2. Classify and present findings
 
-Write a dated, concise report in the repository with one entry per app/component: running version, desired Git pin if different, latest stable candidate, classification, release-note link, migration/configuration effects, dependencies, downtime, verification, and recovery needs. Include current components and unresolved checks so coverage is explicit.
+Write a dated, concise report under the project's ignored `maintenance/` directory with one entry per app/component: running version, desired Git pin if different, latest stable candidate, classification, release-note link, migration/configuration effects, dependencies, downtime, verification, and recovery needs. Include current components and unresolved checks so coverage is explicit. Keep candidate patches and execution notes there too. These artifacts are for local reading and resuming work: preserve them locally, ensure `/maintenance/` is ignored, and never stage, commit, or push them. Deployment configuration and the reusable skill remain version-controlled.
 
 Classify by actual changes, not version-number size alone:
 
@@ -69,7 +69,7 @@ For Uptime Kuma, inspect the database type in `/app/data/db-config.json` without
 
 Change the Git source of truth and publish/sync only the approved wave. A single push containing several core changes can start all of them simultaneously; use separate commits/pushes when sequencing matters. Wait for each critical platform component to recover before dependent changes. Avoid changing desired sync policy merely to perform maintenance.
 
-At wave boundaries, record published revisions, completed rollouts, backup identifiers/locations, and remaining work in the repository report. Temporary files can disappear after a restart. On resume, audit Git, live images, active operations, and current health before continuing the already-approved targets; refresh backups when the interruption warrants it.
+At wave boundaries, record published revisions, completed rollouts, backup identifiers/locations, and remaining work in the local ignored maintenance report. Temporary files can disappear after a restart. On resume, audit Git, live images, active operations, and current health before continuing the already-approved targets; refresh backups when the interruption warrants it.
 
 Render Kustomize with Helm enabled where required; wrapper charts require dependency resolution. Use server-side validation when appropriate. Keep rendered Secrets out of tool output and reports. Check semantic changes to CRDs, RBAC, PVC identity, workload selectors, probes, services, and ingress—not only YAML syntax.
 

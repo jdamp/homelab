@@ -19,3 +19,6 @@ Chart.lock
 *secret*.yaml
 !*sealed-secrets.yaml
 kubernetes/MAJOR_VERSION_UPGRADE_PLAN.md
+
+# Local maintenance reviews, candidate patches, and execution notes
+/maintenance/
