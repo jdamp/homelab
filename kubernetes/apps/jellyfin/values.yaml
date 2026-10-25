@@ -30,6 +30,8 @@ jellyfin:
       existingClaim: jellyfin-config-local
 
     media:
+      # Preserve the existing writable media mount across the chart upgrade.
+      readOnly: false
       enabled: true
       type: pvc
       accessMode: ReadWriteOnce
@@ -44,7 +46,7 @@ jellyfin:
       storageClass: local-path
 
   image:
-    tag: "12.2"
+    tag: "12.3"
 
   resources:
     requests:

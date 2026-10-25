@@ -67,6 +67,8 @@ Carry out approved backup actions first. Check completed backups and application
 
 Change the Git source of truth and publish/sync only the approved wave. A single push containing several core changes can start all of them simultaneously; use separate commits/pushes when sequencing matters. Wait for each critical platform component to recover before dependent changes. Avoid changing desired sync policy merely to perform maintenance.
 
+At wave boundaries, record published revisions, completed rollouts, backup identifiers/locations, and remaining work in the repository report. Temporary files can disappear after a restart. On resume, audit Git, live images, active operations, and current health before continuing the already-approved targets; refresh backups when the interruption warrants it.
+
 Render Kustomize with Helm enabled where required; wrapper charts require dependency resolution. Use server-side validation when appropriate. Keep rendered Secrets out of tool output and reports. Check semantic changes to CRDs, RBAC, PVC identity, workload selectors, probes, services, and ingress—not only YAML syntax.
 
 After each wave confirm rollout completion, expected runtime images/digests, Argo CD health/sync and resource ownership, database readiness/replication/archiving, core routing/storage, and relevant user-visible behavior (OIDC/login, uploads, playback, monitoring targets, etc.). Do not equate Synced with a working application.

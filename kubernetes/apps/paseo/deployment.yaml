@@ -25,7 +25,7 @@ spec:
           type: RuntimeDefault
       initContainers:
         - name: prepare-agent-tools
-          image: moby/buildkit:v0.34.0-rootless
+          image: moby/buildkit:v0.34.1-rootless
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
@@ -149,7 +149,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
         - name: buildkitd
-          image: moby/buildkit:v0.34.0-rootless
+          image: moby/buildkit:v0.34.1-rootless
           imagePullPolicy: IfNotPresent
           args:
             - --addr
