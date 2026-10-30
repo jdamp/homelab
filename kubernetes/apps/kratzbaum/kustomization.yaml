@@ -6,6 +6,7 @@ namespace: kratzbaum
 resources:
   - pvc.yaml
   - oidc-sealed-secrets.yaml
+  - plantnet-sealed-secrets.yaml
   - deployment.yaml
   - service.yaml
   - ingress.yaml

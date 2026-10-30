@@ -65,6 +65,11 @@ spec:
                   key: client-secret
             - name: HEIF_CONVERT
               value: heif-convert
+            - name: PLANTNET_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kratzbaum-plantnet
+                  key: api-key
           volumeMounts:
             - name: data
               mountPath: /data
