@@ -4,6 +4,8 @@
 - Keep repositories and project files under `/workspace`; use `/home/paseo` for user configuration and persistent agent state.
 - Build container images using `buildctl` which is mounted at `/builder/bin/buildctl`
 
+- After every push, monitor CI for the pushed commit and autonomously fix, commit, and push failures until all checks pass. Report any blocker you cannot resolve; never bypass checks to make CI pass.
+
 ## Development Postgres
 
 - Shared disposable PostgreSQL is available at `postgres-dev-rw.paseo.svc.cluster.local:5432` (user `dev`, default database `dev`, no backups).
