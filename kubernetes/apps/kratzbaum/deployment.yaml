@@ -29,7 +29,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: kratzbaum
-          image: ghcr.io/jdamp/kratzbaum:0.1.18@sha256:51443e425bc5db3e0297b21103a1e2b9a15d9b6615235c52990965a000c0c684
+          image: ghcr.io/jdamp/kratzbaum:0.1.20@sha256:98e9cf506e16f738cfe2798f4e90ceb0ebdd49b97184a952ca277c4922f24ef9
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
